@@ -352,7 +352,17 @@ body {
 }
 
 .nav-group.expanded .submenu-container {
-  max-height: 500px;
+  max-height: 1000px;
+}
+
+.submenu-section-title {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.8px;
+  padding: var(--space-3) var(--space-4) var(--space-1) var(--space-4);
+  text-transform: uppercase;
+  user-select: none;
 }
 
 .sub-nav-item {

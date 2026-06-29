@@ -111,7 +111,7 @@ export function render() {
               </div>
             </div>
             <div class="card-body" style="font-size:12px;color:var(--text-secondary);line-height:1.7">
-              <p><strong>ERP Estilo Conta Azul</strong></p>
+              <p><strong>Vectra ERP Cloud</strong></p>
               <p>Desenvolvido com foco em velocidade, fluidez e UX de alta qualidade.</p>
               <p>Versão: 1.0.0 (Vila Cloud)</p>
               <p>© ${new Date().getFullYear()} Antigravity AI.</p>
