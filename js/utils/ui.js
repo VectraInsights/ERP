@@ -87,6 +87,8 @@ export const modal = {
 
     document.body.appendChild(overlay);
     this._current = overlay;
+    window.modal = this;
+    window.ERP_MODAL_CLOSE = () => this.close();
 
     requestAnimationFrame(() => overlay.classList.add('active'));
 

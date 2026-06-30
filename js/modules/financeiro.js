@@ -1903,8 +1903,8 @@ function openForm(tipo, data = null) {
       </form>
     `,
     footer: `
-      <button class="btn btn-ghost" onclick="modal.close()">Cancelar</button>
-      <button class="btn btn-primary" id="btn-save-sub-fin">Salvar Registro</button>
+      <button class="btn btn-ghost" type="button" onclick="window.ERP_MODAL_CLOSE()">Cancelar</button>
+      <button class="btn btn-primary" type="button" id="btn-save-sub-fin">Salvar Registro</button>
     `
   });
 
