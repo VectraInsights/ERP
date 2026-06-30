@@ -9,6 +9,37 @@ import { lineChart, doughnutChart } from '../utils/charts.js';
 
 let paginator = null;
 let searchQuery = '';
+let globalShortcutsBound = false;
+
+function getContasFinanceiras() {
+  return JSON.parse(localStorage.getItem('erp_contas_financeiras') || '[]');
+}
+
+function setupQuickLaunchShortcuts() {
+  if (globalShortcutsBound) return;
+  globalShortcutsBound = true;
+
+  document.addEventListener('keydown', (event) => {
+    if (!event.altKey || event.ctrlKey || event.metaKey) return;
+
+    const key = event.key.toLowerCase();
+    if (key === 'd') {
+      event.preventDefault();
+      const targetHash = '#/financeiro/contas-pagar';
+      if (window.location.hash !== targetHash) {
+        window.location.hash = targetHash;
+      }
+      setTimeout(() => openForm('despesa'), 50);
+    } else if (key === 'r') {
+      event.preventDefault();
+      const targetHash = '#/financeiro/contas-receber';
+      if (window.location.hash !== targetHash) {
+        window.location.hash = targetHash;
+      }
+      setTimeout(() => openForm('receita'), 50);
+    }
+  });
+}
 
 // Seed new databases for financial accounts and cost centers if not present
 function checkSubSeeds() {
@@ -60,6 +91,8 @@ export function render() {
 }
 
 export function afterRender() {
+  setupQuickLaunchShortcuts();
+
   const hash = window.location.hash || '#/financeiro';
 
   if (hash === '#/financeiro/visao-competencia' || hash === '#/financeiro') {
@@ -1811,6 +1844,8 @@ function openForm(tipo, data = null) {
   const isEdit = !!data;
   const pContas = DB.getAll('planoContas').filter(pc => pc.tipo === tipo);
   const clientes = DB.getAll('clientes').filter(c => c.status === 'ativo');
+  const contasFinanceiras = getContasFinanceiras();
+  const contaFinanceiraSelecionada = (data && (data.contaFinanceiraId || data.contaId)) || '';
 
   modal.open({
     id: 'modal-financeiro-sub',
@@ -1841,12 +1876,19 @@ function openForm(tipo, data = null) {
             </select>
           </div>
           <div class="form-group">
-            <label class="form-label">${tipo === 'receita' ? 'Cliente' : 'Fornecedor'}</label>
-            <select class="form-control" name="clienteId">
-              <option value="">Nenhum</option>
-              ${clientes.map(c => `<option value="${c.id}" ${data && data.clienteId === c.id ? 'selected' : ''}>${c.nome}</option>`).join('')}
+            <label class="form-label">Banco / Conta</label>
+            <select class="form-control" name="contaFinanceira">
+              <option value="">Nenhuma</option>
+              ${contasFinanceiras.map(c => `<option value="${c.id}" ${contaFinanceiraSelecionada === c.id ? 'selected' : ''}>${c.nome}${c.banco ? ` (${c.banco})` : ''}</option>`).join('')}
             </select>
           </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">${tipo === 'receita' ? 'Cliente' : 'Fornecedor'}</label>
+          <select class="form-control" name="clienteId">
+            <option value="">Nenhum</option>
+            ${clientes.map(c => `<option value="${c.id}" ${data && data.clienteId === c.id ? 'selected' : ''}>${c.nome}</option>`).join('')}
+          </select>
         </div>
         <div class="form-row">
           <div class="form-group">
@@ -1884,6 +1926,8 @@ function openForm(tipo, data = null) {
     const fd = new FormData(form);
     const cliId = fd.get('clienteId');
     const cli = cliId ? DB.getById('clientes', cliId) : null;
+    const contaFinanceiraId = fd.get('contaFinanceira');
+    const contaFinanceira = contaFinanceiraId ? getContasFinanceiras().find(c => c.id === contaFinanceiraId) : null;
 
     const payload = {
       tipo,
@@ -1891,6 +1935,9 @@ function openForm(tipo, data = null) {
       valor: parseFloat(fd.get('valor')),
       vencimento: fd.get('vencimento'),
       conta: fd.get('conta'),
+      contaId: contaFinanceiraId || null,
+      contaFinanceiraId: contaFinanceiraId || null,
+      contaFinanceiraNome: contaFinanceira ? contaFinanceira.nome : null,
       clienteId: cliId || null,
       clienteNome: cli ? cli.nome : null,
       status: fd.get('status'),
