@@ -84,10 +84,17 @@ function router() {
   document.querySelectorAll('.sub-nav-item').forEach(subItem => {
     if (subItem.getAttribute('href') === hash) {
       subItem.classList.add('active');
-      // Auto expand the parent group
+      
+      // Auto expand the main parent group
       const parentGroup = subItem.closest('.nav-group');
       if (parentGroup) {
         parentGroup.classList.add('expanded');
+      }
+      
+      // Auto expand the nested parent group (e.g. Cadastros / Configurações)
+      const nestedGroup = subItem.closest('.nested-group');
+      if (nestedGroup) {
+        nestedGroup.classList.add('expanded');
       }
     } else {
       subItem.classList.remove('active');
@@ -171,6 +178,17 @@ function setupUIHandlers() {
         } else {
           parentGroup.classList.add('expanded');
         }
+      }
+    });
+  });
+
+  // Toggles for nested submenus inside categories (e.g. Cadastros/Configurações inside Serviços)
+  document.querySelectorAll('.nested-item.has-nested-submenu').forEach(nestedItem => {
+    nestedItem.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const parentGroup = nestedItem.closest('.nested-group');
+      if (parentGroup) {
+        parentGroup.classList.toggle('expanded');
       }
     });
   });
