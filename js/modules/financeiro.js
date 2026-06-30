@@ -514,12 +514,31 @@ function bankIcon(banco) {
   return getBankLogo(banco, 20);
 }
 
+function normalizeBankName(banco) {
+  if (!banco) return 'Nenhum';
+  const normalized = String(banco).trim();
+  const lower = normalized.toLowerCase();
+  if (/banco do brasil/.test(lower)) return 'Banco do Brasil';
+  if (/banco inter|inter\b/.test(lower)) return 'Banco Inter';
+  if (/itau/.test(lower)) return 'Itaú';
+  if (/bradesco/.test(lower)) return 'Bradesco';
+  if (/santander/.test(lower)) return 'Santander';
+  if (/caixa/.test(lower)) return 'Caixa';
+  if (/nubank/.test(lower)) return 'Nubank';
+  if (/c6/.test(lower)) return 'C6 Bank';
+  if (/sicoob/.test(lower)) return 'Sicoob';
+  if (/btg/.test(lower)) return 'BTG Pactual';
+  if (/nenhum|sem banco|caixa fisico|caixa fisico/i.test(lower)) return 'Nenhum';
+  return normalized;
+}
+
 function tipoLabel(t) {
   return { corrente: 'Conta Corrente', poupanca: 'Poupança', caixa: 'Caixa Físico', investimento: 'Investimento', digital: 'Conta Digital' }[t] || t;
 }
 
 function getBankLogo(banco, size = 28) {
   const baseSize = Number(size) || 28;
+  const bankKey = normalizeBankName(banco);
   const logos = {
     'Itaú': `<svg width="${baseSize}" height="${baseSize}" viewBox="0 0 28 28" fill="none"><defs><linearGradient id="itau-grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#003d82;stop-opacity:1" /><stop offset="100%" style="stop-color:#0066cc;stop-opacity:1" /></linearGradient></defs><rect width="28" height="28" rx="6" fill="url(#itau-grad)"/><text x="14" y="17" font-size="12" font-weight="900" fill="#FFD700" text-anchor="middle" font-family="Arial, sans-serif">Itaú</text></svg>`,
     'Bradesco': `<svg width="${baseSize}" height="${baseSize}" viewBox="0 0 28 28" fill="none"><defs><radialGradient id="brad-grad" cx="50%" cy="50%" r="50%"><stop offset="0%" style="stop-color:#ff3333;stop-opacity:1" /><stop offset="100%" style="stop-color:#cc0000;stop-opacity:1" /></radialGradient></defs><rect width="28" height="28" rx="6" fill="url(#brad-grad)"/><path d="M8 8h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2z" fill="none" stroke="white" stroke-width="2"/><path d="M8 14h12" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>`,
@@ -531,10 +550,142 @@ function getBankLogo(banco, size = 28) {
     'C6 Bank': `<svg width="${baseSize}" height="${baseSize}" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#000"/><text x="14" y="18" font-size="12" font-weight="900" fill="#fff" text-anchor="middle" font-family="Arial, sans-serif">C6</text></svg>`,
     'Sicoob': `<svg width="${baseSize}" height="${baseSize}" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#1ea915"/><path d="M9 9h10v10H9z" fill="white"/><path d="M10 10h8v8h-8z" fill="#1ea915"/></svg>`,
     'BTG Pactual': `<svg width="${baseSize}" height="${baseSize}" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#000"/><text x="14" y="18" font-size="11" font-weight="900" fill="#fff" text-anchor="middle" font-family="Arial, sans-serif">BTG</text></svg>`,
+    'Nenhum': `<svg width="${baseSize}" height="${baseSize}" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#555"/><path d="M9 9h10v10H9z" fill="#777"/><path d="M10 12h8" stroke="#fff" stroke-width="2" stroke-linecap="round"/><path d="M10 16h8" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>`,
     'Outro': `<svg width="${baseSize}" height="${baseSize}" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#666"/><text x="14" y="18" font-size="12" font-weight="900" fill="#fff" text-anchor="middle" font-family="Arial, sans-serif">?</text></svg>`
   };
 
-  return logos[banco] || `<svg width="${baseSize}" height="${baseSize}" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#999"/><text x="14" y="18" font-size="12" font-weight="900" fill="#fff" text-anchor="middle" font-family="Arial, sans-serif">🏦</text></svg>`;
+  return logos[bankKey] || `<svg width="${baseSize}" height="${baseSize}" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#999"/><text x="14" y="18" font-size="12" font-weight="900" fill="#fff" text-anchor="middle" font-family="Arial, sans-serif">🏦</text></svg>`;
+}
+
+function formatDateInputValue(iso) {
+  return iso ? iso : today();
+}
+
+function createCalendarPopover(input) {
+  if (!input) return;
+  input.readOnly = true;
+  input.classList.add('custom-date-picker');
+
+  let currentDate = parseDateValue(input.value || today());
+  let selectedIso = input.value || today();
+  let popover = null;
+
+  const removePopover = () => {
+    if (popover) {
+      popover.remove();
+      popover = null;
+      document.removeEventListener('click', outsideClick);
+    }
+  };
+
+  const outsideClick = (event) => {
+    if (!popover) return;
+    if (event.target === input || popover.contains(event.target)) return;
+    removePopover();
+  };
+
+  const buildCalendar = (date) => {
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const startOffset = firstDay.getDay();
+    const days = [];
+    const startDate = new Date(year, month, 1 - startOffset);
+
+    const monthName = firstDay.toLocaleString('pt-BR', { month: 'long' });
+    const header = `
+      <div class="calendar-header">
+        <button type="button" class="calendar-nav" data-action="prev">◀</button>
+        <div class="calendar-title">${monthName} ${year}</div>
+        <button type="button" class="calendar-nav" data-action="next">▶</button>
+      </div>
+      <div class="calendar-weekdays">${['D','S','T','Q','Q','S','S'].map(d => `<div>${d}</div>`).join('')}</div>
+      <div class="calendar-days"></div>
+      <div class="calendar-footer">
+        <button type="button" class="btn btn-ghost btn-sm" data-action="clear">Limpar</button>
+        <button type="button" class="btn btn-primary btn-sm" data-action="today">Hoje</button>
+      </div>
+    `;
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'calendar-popover';
+    wrapper.innerHTML = header;
+
+    const daysContainer = wrapper.querySelector('.calendar-days');
+    for (let i = 0; i < 42; i += 1) {
+      const day = new Date(startDate);
+      day.setDate(startDate.getDate() + i);
+      const iso = day.toISOString().split('T')[0];
+      const dayEl = document.createElement('button');
+      dayEl.type = 'button';
+      dayEl.className = 'calendar-day';
+      dayEl.textContent = String(day.getDate());
+      if (day.getMonth() !== month) dayEl.classList.add('disabled');
+      if (iso === selectedIso) dayEl.classList.add('selected');
+      dayEl.addEventListener('click', () => {
+        if (day.getMonth() !== month) return;
+        selectedIso = iso;
+        input.value = selectedIso;
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+        removePopover();
+      });
+      daysContainer.appendChild(dayEl);
+    }
+
+    wrapper.querySelector('[data-action="prev"]').addEventListener('click', () => {
+      currentDate = new Date(year, month - 1, 1);
+      wrapper.replaceWith(buildCalendar(currentDate));
+      popover = document.querySelector('.calendar-popover');
+      document.addEventListener('click', outsideClick);
+    });
+
+    wrapper.querySelector('[data-action="next"]').addEventListener('click', () => {
+      currentDate = new Date(year, month + 1, 1);
+      wrapper.replaceWith(buildCalendar(currentDate));
+      popover = document.querySelector('.calendar-popover');
+      document.addEventListener('click', outsideClick);
+    });
+
+    wrapper.querySelector('[data-action="clear"]').addEventListener('click', () => {
+      input.value = '';
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+      removePopover();
+    });
+
+    wrapper.querySelector('[data-action="today"]').addEventListener('click', () => {
+      const todayValue = today();
+      input.value = todayValue;
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+      removePopover();
+    });
+
+    return wrapper;
+  };
+
+  const openPopover = () => {
+    removePopover();
+    currentDate = parseDateValue(input.value || today());
+    selectedIso = input.value || today();
+    popover = buildCalendar(currentDate);
+    document.body.appendChild(popover);
+    const rect = input.getBoundingClientRect();
+    popover.style.top = `${rect.bottom + window.scrollY + 8}px`;
+    popover.style.left = `${rect.left + window.scrollX}px`;
+    document.addEventListener('click', outsideClick);
+  };
+
+  input.addEventListener('click', openPopover);
+  input.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      openPopover();
+    }
+  });
+}
+
+function parseDateValue(value) {
+  const date = new Date(value);
+  return isNaN(date.getTime()) ? new Date() : date;
 }
 
 function renderContasFinanceiras() {
@@ -1846,13 +1997,13 @@ function openForm(tipo, data = null) {
           </div>
           <div class="form-group">
             <label class="form-label">Vencimento <span class="required">*</span></label>
-            <input type="date" class="form-control" name="vencimento" value="${data ? data.vencimento : today()}" required>
+            <input type="text" class="form-control" name="vencimento" value="${formatDateInputValue(data ? data.vencimento : today())}" placeholder="AAAA-MM-DD" required readonly>
           </div>
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label">Categoria DRE <span class="required">*</span></label>
-            <select class="form-control" name="conta" required>
+            <label class="form-label">Categoria DRE</label>
+            <select class="form-control" name="conta">
               <option value="">Selecione...</option>
               ${pContas.map(pc => `<option value="${pc.id}" ${data && data.conta === pc.id ? 'selected' : ''}>${pc.nome}</option>`).join('')}
             </select>
@@ -1899,6 +2050,8 @@ function openForm(tipo, data = null) {
     `
   });
 
+  createCalendarPopover(document.querySelector('#form-financeiro-sub input[name="vencimento"]'));
+
   document.getElementById('btn-save-sub-fin')?.addEventListener('click', () => {
     const form = document.getElementById('form-financeiro-sub');
     if (!form.checkValidity()) {
@@ -1916,7 +2069,7 @@ function openForm(tipo, data = null) {
       descricao: fd.get('descricao'),
       valor: parseFloat(fd.get('valor')),
       vencimento: fd.get('vencimento'),
-      conta: fd.get('conta'),
+      conta: fd.get('conta') || null,
       contaId: contaFinanceiraId || null,
       contaFinanceiraId: contaFinanceiraId || null,
       contaFinanceiraNome: contaFinanceira ? contaFinanceira.nome : null,
