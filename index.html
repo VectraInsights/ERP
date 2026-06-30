@@ -44,53 +44,139 @@
 
       <!-- Menu de Navegação Principal -->
       <nav class="sidebar-nav">
-        <!-- Dashboard Link (Direct link) -->
+        <!-- Início (Direct link) -->
         <a href="#/dashboard" class="nav-item">
           <div class="nav-active-indicator"></div>
           <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
           </svg>
-          <span class="nav-label">Dashboard Inicial</span>
+          <span class="nav-label">Início</span>
         </a>
 
-        <!-- FINANCEIRO GROUP -->
-        <div class="nav-group" id="nav-group-financeiro">
-          <div class="nav-item has-submenu" data-toggle="financeiro">
+        <!-- FAVORITOS GROUP -->
+        <div class="nav-group" id="nav-group-favoritos">
+          <div class="nav-item has-submenu" data-toggle="favoritos">
             <div class="nav-active-indicator"></div>
             <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
             </svg>
-            <span class="nav-label">Financeiro</span>
+            <span class="nav-label">Favoritos</span>
+            <svg class="submenu-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div class="submenu-container" id="favoritos-submenu">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+        <!-- FRENTE DE CAIXA GROUP -->
+        <div class="nav-group" id="nav-group-frente-caixa">
+          <div class="nav-item has-submenu" data-toggle="frente-caixa">
+            <div class="nav-active-indicator"></div>
+            <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+              <line x1="2" y1="10" x2="22" y2="10"/>
+              <rect x="6" y="14" width="4" height="3"/>
+              <rect x="14" y="14" width="4" height="3"/>
+            </svg>
+            <span class="nav-label">Frente de caixa</span>
             <svg class="submenu-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
           </div>
           <div class="submenu-container">
-            <a href="#/financeiro/visao-competencia" class="sub-nav-item">
-              <span class="sub-nav-dot"></span> Visão de competência
+            <a href="#/frente-caixa" class="sub-nav-item" data-name="Frente de caixa">
+              <span class="sub-nav-dot"></span> Frente de caixa
             </a>
-            <a href="#/financeiro/contas-pagar" class="sub-nav-item">
-              <span class="sub-nav-dot"></span> Contas a pagar
+            <a href="#/frente-caixa/movimentacao" class="sub-nav-item" data-name="Movimentação do caixa">
+              <span class="sub-nav-dot"></span> Movimentação do caixa
             </a>
-            <a href="#/financeiro/contas-receber" class="sub-nav-item">
-              <span class="sub-nav-dot"></span> Contas a receber
+            <a href="#/frente-caixa/vendedor" class="sub-nav-item" data-name="Vendas por vendedor no PDV">
+              <span class="sub-nav-dot"></span> Vendas por vendedor no PDV
             </a>
-            <a href="#/financeiro/contas-financeiras" class="sub-nav-item">
-              <span class="sub-nav-dot"></span> Contas financeiras
+            <a href="#/frente-caixa/notas" class="sub-nav-item" data-name="Notas fiscais de consumidor">
+              <span class="sub-nav-dot"></span> Notas fiscais de consumidor
             </a>
-            <a href="#/financeiro/extrato" class="sub-nav-item">
-              <span class="sub-nav-dot"></span> Extrato de movimentações
+            <a href="#/frente-caixa/fiscal" class="sub-nav-item" data-name="Menu fiscal">
+              <span class="sub-nav-dot"></span> Menu fiscal
             </a>
-            <a href="#/financeiro/fluxo-caixa" class="sub-nav-item">
-              <span class="sub-nav-dot"></span> Fluxo de caixa
+            <div class="nested-group">
+              <div class="nested-item has-nested-submenu">
+                <span>Configurações</span>
+                <svg class="nested-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+              </div>
+              <div class="nested-submenu-container">
+                <a href="#/frente-caixa/config" class="sub-nav-item" data-name="Configurar frente de caixa">
+                  <span class="sub-nav-dot"></span> Configurar frente de caixa
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- VENDAS GROUP -->
+        <div class="nav-group" id="nav-group-vendas">
+          <div class="nav-item has-submenu" data-toggle="vendas">
+            <div class="nav-active-indicator"></div>
+            <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M3 9h18v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z"/>
+              <path d="M3 9l2-4h14l2 4"/>
+              <path d="M5 9V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v4"/>
+            </svg>
+            <span class="nav-label">Vendas</span>
+            <svg class="submenu-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div class="submenu-container">
+            <a href="#/servicos/orcamentos" class="sub-nav-item" data-name="Orçamentos (Vendas)">
+              <span class="sub-nav-dot"></span> Orçamentos
             </a>
-            <a href="#/financeiro/historico" class="sub-nav-item">
-              <span class="sub-nav-dot"></span> Histórico
+            <a href="#/vendas" class="sub-nav-item" data-name="Vendas de produtos">
+              <span class="sub-nav-dot"></span> Vendas de produtos
             </a>
-            <a href="#/financeiro/categorias" class="sub-nav-item">
-              <span class="sub-nav-dot"></span> Categorias financeiras
+            <a href="#/servicos/contratos" class="sub-nav-item" data-name="Contratos (Vendas)">
+              <span class="sub-nav-dot"></span> Contratos
             </a>
-            <a href="#/financeiro/centros-custo" class="sub-nav-item">
-              <span class="sub-nav-dot"></span> Centros de custo
+            <a href="#/servicos/parcelas" class="sub-nav-item" data-name="Parcelas a receber (Vendas)">
+              <span class="sub-nav-dot"></span> Parcelas a receber
             </a>
+            <a href="#/vendas/notas" class="sub-nav-item" data-name="Notas fiscais de produto">
+              <span class="sub-nav-dot"></span> Notas fiscais de produto
+            </a>
+            <a href="#/servicos/serasa" class="sub-nav-item" data-name="Consulta Serasa (Vendas)">
+              <span class="sub-nav-dot"></span> Consulta Serasa
+            </a>
+            <div class="nested-group">
+              <div class="nested-item has-nested-submenu">
+                <span>Cadastros</span>
+                <svg class="nested-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+              </div>
+              <div class="nested-submenu-container">
+                <a href="#/clientes" class="sub-nav-item" data-name="Clientes (Vendas)">
+                  <span class="sub-nav-dot"></span> Clientes
+                </a>
+                <a href="#/produtos" class="sub-nav-item" data-name="Produtos (Vendas)">
+                  <span class="sub-nav-dot"></span> Produtos
+                </a>
+                <a href="#/servicos/cadastros/transportadoras" class="sub-nav-item" data-name="Transportadoras (Vendas)">
+                  <span class="sub-nav-dot"></span> Transportadoras
+                </a>
+              </div>
+            </div>
+            <div class="nested-group">
+              <div class="nested-item has-nested-submenu">
+                <span>Configurações</span>
+                <svg class="nested-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+              </div>
+              <div class="nested-submenu-container">
+                <a href="#/servicos/config/notas-fiscais" class="sub-nav-item" data-name="Configurar notas fiscais (Vendas)">
+                  <span class="sub-nav-dot"></span> Configurar notas fiscais
+                </a>
+                <a href="#/servicos/config/modelo-email" class="sub-nav-item" data-name="Modelo de e-mail de venda (Vendas)">
+                  <span class="sub-nav-dot"></span> Modelo de e-mail de venda
+                </a>
+                <a href="#/servicos/config/series-notas" class="sub-nav-item" data-name="Séries de notas fiscais (Vendas)">
+                  <span class="sub-nav-dot"></span> Séries de notas fiscais
+                </a>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -105,61 +191,57 @@
             <svg class="submenu-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
           </div>
           <div class="submenu-container">
-            <a href="#/servicos/orcamentos" class="sub-nav-item">
+            <a href="#/servicos/orcamentos" class="sub-nav-item" data-name="Orçamentos (Serviços)">
               <span class="sub-nav-dot"></span> Orçamentos
             </a>
-            <a href="#/servicos/vendas" class="sub-nav-item">
+            <a href="#/servicos/vendas" class="sub-nav-item" data-name="Vendas de serviços">
               <span class="sub-nav-dot"></span> Vendas de serviços
             </a>
-            <a href="#/servicos/contratos" class="sub-nav-item">
+            <a href="#/servicos/contratos" class="sub-nav-item" data-name="Contratos (Serviços)">
               <span class="sub-nav-dot"></span> Contratos
             </a>
-            <a href="#/servicos/ordens" class="sub-nav-item">
+            <a href="#/servicos/ordens" class="sub-nav-item" data-name="Ordens de serviço">
               <span class="sub-nav-dot"></span> Ordens de serviço
             </a>
-            <a href="#/servicos/parcelas" class="sub-nav-item">
+            <a href="#/servicos/parcelas" class="sub-nav-item" data-name="Parcelas a receber (Serviços)">
               <span class="sub-nav-dot"></span> Parcelas a receber
             </a>
-            <a href="#/servicos/notas-fiscais" class="sub-nav-item">
+            <a href="#/servicos/notas-fiscais" class="sub-nav-item" data-name="Notas fiscais de serviço">
               <span class="sub-nav-dot"></span> Notas fiscais de serviço
             </a>
-            <a href="#/servicos/serasa" class="sub-nav-item">
+            <a href="#/servicos/serasa" class="sub-nav-item" data-name="Consulta Serasa (Serviços)">
               <span class="sub-nav-dot"></span> Consulta Serasa
             </a>
-            
-            <!-- Subcategoria: Cadastros -->
             <div class="nested-group">
               <div class="nested-item has-nested-submenu">
                 <span>Cadastros</span>
                 <svg class="nested-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
               </div>
               <div class="nested-submenu-container">
-                <a href="#/servicos/cadastros/clientes" class="sub-nav-item">
+                <a href="#/servicos/cadastros/clientes" class="sub-nav-item" data-name="Clientes (Serviços)">
                   <span class="sub-nav-dot"></span> Clientes
                 </a>
-                <a href="#/servicos/cadastros/servicos" class="sub-nav-item">
+                <a href="#/servicos/cadastros/servicos" class="sub-nav-item" data-name="Serviços (Cadastros)">
                   <span class="sub-nav-dot"></span> Serviços
                 </a>
-                <a href="#/servicos/cadastros/transportadoras" class="sub-nav-item">
+                <a href="#/servicos/cadastros/transportadoras" class="sub-nav-item" data-name="Transportadoras (Serviços)">
                   <span class="sub-nav-dot"></span> Transportadoras
                 </a>
               </div>
             </div>
-            
-            <!-- Subcategoria: Configurações -->
             <div class="nested-group">
               <div class="nested-item has-nested-submenu">
                 <span>Configurações</span>
                 <svg class="nested-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
               </div>
               <div class="nested-submenu-container">
-                <a href="#/servicos/config/notas-fiscais" class="sub-nav-item">
+                <a href="#/servicos/config/notas-fiscais" class="sub-nav-item" data-name="Configurar notas fiscais (Serviços)">
                   <span class="sub-nav-dot"></span> Configurar notas fiscais
                 </a>
-                <a href="#/servicos/config/modelo-email" class="sub-nav-item">
+                <a href="#/servicos/config/modelo-email" class="sub-nav-item" data-name="Modelo de e-mail de venda (Serviços)">
                   <span class="sub-nav-dot"></span> Modelo de e-mail de venda
                 </a>
-                <a href="#/servicos/config/series-notas" class="sub-nav-item">
+                <a href="#/servicos/config/series-notas" class="sub-nav-item" data-name="Séries de notas fiscais (Serviços)">
                   <span class="sub-nav-dot"></span> Séries de notas fiscais
                 </a>
               </div>
@@ -167,48 +249,188 @@
           </div>
         </div>
 
-        <!-- COMERCIAL GROUP -->
-        <div class="nav-group" id="nav-group-comercial">
-          <div class="nav-item has-submenu" data-toggle="comercial">
+        <!-- COMPRAS GROUP -->
+        <div class="nav-group" id="nav-group-compras">
+          <div class="nav-item has-submenu" data-toggle="compras">
             <div class="nav-active-indicator"></div>
             <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+              <rect x="16" y="4" width="2" height="2"/>
+              <rect x="6" y="4" width="2" height="2"/>
+              <rect x="2" y="6" width="20" height="14" rx="2" ry="2"/>
             </svg>
-            <span class="nav-label">Comercial</span>
+            <span class="nav-label">Compras</span>
             <svg class="submenu-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
           </div>
           <div class="submenu-container">
-            <a href="#/clientes" class="sub-nav-item">
-              <span class="sub-nav-dot"></span> Clientes
+            <a href="#/compras" class="sub-nav-item" data-name="Compras">
+              <span class="sub-nav-dot"></span> Compras
             </a>
-            <a href="#/vendas" class="sub-nav-item">
-              <span class="sub-nav-dot"></span> Vendas / Faturamento
-            </a>
-            <a href="#/produtos" class="sub-nav-item">
-              <span class="sub-nav-dot"></span> Produtos & Estoque
-            </a>
+            <div class="nested-group">
+              <div class="nested-item has-nested-submenu">
+                <span>Notas fiscais de compra</span>
+                <svg class="nested-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+              </div>
+              <div class="nested-submenu-container">
+                <a href="#/compras/notas-produto" class="sub-nav-item" data-name="Notas de produto (NF-e)">
+                  <span class="sub-nav-dot"></span> Notas de produto (NF-e)
+                </a>
+                <a href="#/compras/notas-servico" class="sub-nav-item" data-name="Notas de serviço (NFS-e)">
+                  <span class="sub-nav-dot"></span> Notas de serviço (NFS-e)
+                </a>
+                <a href="#/compras/notas-importacao" class="sub-nav-item" data-name="Notas de importação">
+                  <span class="sub-nav-dot"></span> Notas de importação
+                </a>
+              </div>
+            </div>
+            <!-- Submenu FINANCEIRO is REMOVED -->
+            <div class="nested-group">
+              <div class="nested-item has-nested-submenu">
+                <span>Cadastros</span>
+                <svg class="nested-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+              </div>
+              <div class="nested-submenu-container">
+                <a href="#/compras/fornecedores" class="sub-nav-item" data-name="Fornecedores">
+                  <span class="sub-nav-dot"></span> Fornecedores
+                </a>
+                <a href="#/compras/cadastros/produtos" class="sub-nav-item" data-name="Produtos (Compras)">
+                  <span class="sub-nav-dot"></span> Produtos
+                </a>
+                <a href="#/compras/cadastros/servicos" class="sub-nav-item" data-name="Serviços (Compras)">
+                  <span class="sub-nav-dot"></span> Serviços
+                </a>
+                <a href="#/compras/cadastros/transportadoras" class="sub-nav-item" data-name="Transportadoras (Compras)">
+                  <span class="sub-nav-dot"></span> Transportadoras
+                </a>
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- SUPRIMENTOS GROUP -->
-        <div class="nav-group" id="nav-group-suprimentos">
-          <div class="nav-item has-submenu" data-toggle="suprimentos">
+        <!-- FINANCEIRO GROUP -->
+        <div class="nav-group" id="nav-group-financeiro">
+          <div class="nav-item has-submenu" data-toggle="financeiro">
             <div class="nav-active-indicator"></div>
             <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+              <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
             </svg>
-            <span class="nav-label">Suprimentos</span>
+            <span class="nav-label">Financeiro</span>
             <svg class="submenu-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
           </div>
           <div class="submenu-container">
-            <a href="#/compras" class="sub-nav-item">
-              <span class="sub-nav-dot"></span> Compras & Pedidos
+            <a href="#/financeiro/visao-competencia" class="sub-nav-item" data-name="Visão de competência">
+              <span class="sub-nav-dot"></span> Visão de competência
             </a>
-            <a href="#/compras/fornecedores" class="sub-nav-item">
-              <span class="sub-nav-dot"></span> Fornecedores
+            <a href="#/financeiro/contas-pagar" class="sub-nav-item" data-name="Contas a pagar">
+              <span class="sub-nav-dot"></span> Contas a pagar
             </a>
+            <a href="#/financeiro/contas-receber" class="sub-nav-item" data-name="Contas a receber">
+              <span class="sub-nav-dot"></span> Contas a receber
+            </a>
+            <a href="#/financeiro/inadimplentes" class="sub-nav-item" data-name="Inadimplentes">
+              <span class="sub-nav-dot"></span> Inadimplentes <span class="badge badge-warning" style="font-size: 9px; padding: 1px 4px; margin-left: 4px;">Beta</span>
+            </a>
+            <a href="#/financeiro/contas-financeiras" class="sub-nav-item" data-name="Contas financeiras">
+              <span class="sub-nav-dot"></span> Contas financeiras
+            </a>
+            <a href="#/financeiro/extrato" class="sub-nav-item" data-name="Extrato de movimentações">
+              <span class="sub-nav-dot"></span> Extrato de movimentações
+            </a>
+            <a href="#/financeiro/fluxo-caixa" class="sub-nav-item" data-name="Fluxo de caixa">
+              <span class="sub-nav-dot"></span> Fluxo de caixa
+            </a>
+            <a href="#/financeiro/historico" class="sub-nav-item" data-name="Histórico">
+              <span class="sub-nav-dot"></span> Histórico
+            </a>
+            <div class="nested-group">
+              <div class="nested-item has-nested-submenu">
+                <span>Cadastros</span>
+                <svg class="nested-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+              </div>
+              <div class="nested-submenu-container">
+                <a href="#/financeiro/categorias" class="sub-nav-item" data-name="Categorias financeiras">
+                  <span class="sub-nav-dot"></span> Categorias financeiras
+                </a>
+                <a href="#/financeiro/centros-custo" class="sub-nav-item" data-name="Centros de custo">
+                  <span class="sub-nav-dot"></span> Centros de custo
+                </a>
+              </div>
+            </div>
           </div>
         </div>
+
+        <!-- ESTOQUE GROUP -->
+        <div class="nav-group" id="nav-group-estoque">
+          <div class="nav-item has-submenu" data-toggle="estoque">
+            <div class="nav-active-indicator"></div>
+            <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <polyline points="21 8 21 21 3 21 3 8"/>
+              <rect x="1" y="3" width="22" height="5"/>
+              <line x1="10" y1="12" x2="14" y2="12"/>
+            </svg>
+            <span class="nav-label">Estoque</span>
+            <svg class="submenu-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div class="submenu-container">
+            <a href="#/estoque/situacao" class="sub-nav-item" data-name="Situação de estoque">
+              <span class="sub-nav-dot"></span> Situação de estoque
+            </a>
+            <a href="#/estoque/movimentacoes" class="sub-nav-item" data-name="Movimentações manuais">
+              <span class="sub-nav-dot"></span> Movimentações manuais <span class="badge badge-success" style="font-size: 9px; padding: 1px 4px; margin-left: 4px;">Novo</span>
+            </a>
+            <a href="#/estoque/inventarios" class="sub-nav-item" data-name="Inventários">
+              <span class="sub-nav-dot"></span> Inventários
+            </a>
+            <div class="nested-group">
+              <div class="nested-item has-nested-submenu">
+                <span>Cadastros</span>
+                <svg class="nested-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+              </div>
+              <div class="nested-submenu-container">
+                <a href="#/produtos" class="sub-nav-item" data-name="Produtos (Estoque)">
+                  <span class="sub-nav-dot"></span> Produtos
+                </a>
+                <a href="#/estoque/cadastros/precos" class="sub-nav-item" data-name="Tabelas de preços">
+                  <span class="sub-nav-dot"></span> Tabelas de preços
+                </a>
+                <a href="#/estoque/cadastros/marcas" class="sub-nav-item" data-name="Marcas">
+                  <span class="sub-nav-dot"></span> Marcas
+                </a>
+                <a href="#/estoque/cadastros/unidades" class="sub-nav-item" data-name="Unidades de medida">
+                  <span class="sub-nav-dot"></span> Unidades de medida
+                </a>
+                <a href="#/estoque/cadastros/categorias" class="sub-nav-item" data-name="Categorias de produtos">
+                  <span class="sub-nav-dot"></span> Categorias de produtos
+                </a>
+                <a href="#/estoque/cadastros/locais" class="sub-nav-item" data-name="Locais de estoque">
+                  <span class="sub-nav-dot"></span> Locais de estoque <span class="badge badge-success" style="font-size: 9px; padding: 1px 4px; margin-left: 4px;">Novo</span>
+                </a>
+              </div>
+            </div>
+            <div class="nested-group">
+              <div class="nested-item has-nested-submenu">
+                <span>Configurações</span>
+                <svg class="nested-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+              </div>
+              <div class="nested-submenu-container">
+                <a href="#/estoque/config" class="sub-nav-item" data-name="Configurar estoque">
+                  <span class="sub-nav-dot"></span> Configurar estoque
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Relatórios (Direct link) -->
+        <a href="#/relatorios" class="nav-item">
+          <div class="nav-active-indicator"></div>
+          <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <line x1="18" y1="20" x2="18" y2="10"/>
+            <line x1="12" y1="20" x2="12" y2="4"/>
+            <line x1="6" y1="20" x2="6" y2="14"/>
+          </svg>
+          <span class="nav-label">Relatórios</span>
+        </a>
+
       </nav>
 
 

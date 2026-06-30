@@ -20,6 +20,7 @@ const routes = {
   '#/financeiro/visao-competencia':  Financeiro,
   '#/financeiro/contas-pagar':       Financeiro,
   '#/financeiro/contas-receber':     Financeiro,
+  '#/financeiro/inadimplentes':      Financeiro,
   '#/financeiro/contas-financeiras': Financeiro,
   '#/financeiro/extrato':            Financeiro,
   '#/financeiro/fluxo-caixa':        Financeiro,
@@ -43,8 +44,24 @@ const routes = {
   '#/clientes':                      Clientes,
   '#/produtos':                      Produtos,
   '#/vendas':                        Vendas,
+  '#/vendas/notas':                  Vendas,
   '#/compras':                       Compras,
+  '#/compras/notas-produto':         Compras,
+  '#/compras/notas-servico':         Compras,
+  '#/compras/notas-importacao':      Compras,
   '#/compras/fornecedores':          Compras,
+  '#/compras/cadastros/produtos':    Produtos,
+  '#/compras/cadastros/servicos':    Servicos,
+  '#/compras/cadastros/transportadoras': Servicos,
+  '#/estoque/situacao':              Produtos,
+  '#/estoque/movimentacoes':         Produtos,
+  '#/estoque/inventarios':           Produtos,
+  '#/estoque/cadastros/precos':      Produtos,
+  '#/estoque/cadastros/marcas':      Produtos,
+  '#/estoque/cadastros/unidades':    Produtos,
+  '#/estoque/cadastros/categorias':  Produtos,
+  '#/estoque/cadastros/locais':      Produtos,
+  '#/estoque/config':                Produtos,
   '#/configuracoes':                 Configuracoes,
 };
 
@@ -89,6 +106,7 @@ function router() {
       const parentGroup = subItem.closest('.nav-group');
       if (parentGroup) {
         parentGroup.classList.add('expanded');
+        parentGroup.querySelector('.nav-item')?.classList.add('active');
       }
       
       // Auto expand the nested parent group (e.g. Cadastros / Configurações)
@@ -203,6 +221,106 @@ function setupUIHandlers() {
   });
 }
 
+// Favorites Feature Logic
+function updateFavoritesMenu() {
+  const container = document.getElementById('favoritos-submenu');
+  if (!container) return;
+
+  const favorites = JSON.parse(localStorage.getItem('erp_favorites') || '[]');
+  if (favorites.length === 0) {
+    container.innerHTML = `
+      <div class="sub-nav-item disabled" style="font-style: italic; color: var(--text-muted); pointer-events: none;">
+        <span class="sub-nav-dot"></span> Nenhum favorito
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = favorites.map(fav => `
+    <a href="${fav.href}" class="sub-nav-item" data-name="${fav.name}">
+      <span class="sub-nav-dot"></span> ${fav.name}
+      <button class="fav-btn is-favorite" aria-label="Favoritar">
+        <svg class="star-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+        </svg>
+      </button>
+    </a>
+  `).join('');
+
+  // Highlight active submenu item inside favorites
+  const hash = window.location.hash || '#/dashboard';
+  container.querySelectorAll('.sub-nav-item').forEach(subItem => {
+    if (subItem.getAttribute('href') === hash) {
+      subItem.classList.add('active');
+    } else {
+      subItem.classList.remove('active');
+    }
+  });
+}
+
+function initFavorites() {
+  // Append fav-btn to all static sub-nav-items (excluding favorites submenu itself which is populated dynamically)
+  document.querySelectorAll('.sub-nav-item').forEach(item => {
+    if (item.closest('#favoritos-submenu')) return;
+    
+    // Create button if it doesn't exist
+    if (!item.querySelector('.fav-btn')) {
+      const btn = document.createElement('button');
+      btn.className = 'fav-btn';
+      btn.setAttribute('aria-label', 'Favoritar');
+      btn.innerHTML = `
+        <svg class="star-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+        </svg>
+      `;
+      item.appendChild(btn);
+    }
+  });
+
+  // Mark already favorited items
+  const favorites = JSON.parse(localStorage.getItem('erp_favorites') || '[]');
+  favorites.forEach(fav => {
+    document.querySelectorAll(`.sub-nav-item[href="${fav.href}"] .fav-btn`).forEach(btn => {
+      btn.classList.add('is-favorite');
+    });
+  });
+
+  updateFavoritesMenu();
+
+  // Listen for clicks on fav-btn (using delegation)
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.fav-btn');
+    if (!btn) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    const item = btn.closest('.sub-nav-item');
+    if (!item) return;
+
+    const href = item.getAttribute('href');
+    const name = item.dataset.name || item.textContent.replace(/★|☆/g, '').trim();
+
+    let favoritesList = JSON.parse(localStorage.getItem('erp_favorites') || '[]');
+    const isFav = btn.classList.contains('is-favorite');
+
+    if (isFav) {
+      // Remove
+      favoritesList = favoritesList.filter(f => f.href !== href);
+      document.querySelectorAll(`.sub-nav-item[href="${href}"] .fav-btn`).forEach(b => b.classList.remove('is-favorite'));
+    } else {
+      // Add
+      if (!favoritesList.some(f => f.href === href)) {
+        favoritesList.push({ name, href });
+      }
+      document.querySelectorAll(`.sub-nav-item[href="${href}"] .fav-btn`).forEach(b => b.classList.add('is-favorite'));
+    }
+
+    localStorage.setItem('erp_favorites', JSON.stringify(favoritesList));
+    updateFavoritesMenu();
+  });
+}
+
 // Application startup
 document.addEventListener('DOMContentLoaded', () => {
   // 1. Run seed data
@@ -211,7 +329,14 @@ document.addEventListener('DOMContentLoaded', () => {
   // 2. Set UI Event Listeners
   setupUIHandlers();
 
-  // 3. Router init
-  window.addEventListener('hashchange', router);
+  // 3. Initialize favorites
+  initFavorites();
+
+  // 4. Router init
+  window.addEventListener('hashchange', () => {
+    router();
+    updateFavoritesMenu();
+  });
   router(); // First load
 });
+

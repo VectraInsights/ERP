@@ -767,3 +767,160 @@ body {
 
   .header-search { display: none; }
 }
+
+/* ─── Favorites Feature ──────────────────────────────────── */
+.sub-nav-item {
+  position: relative;
+  display: flex !important;
+  align-items: center;
+  width: 100%;
+}
+
+.fav-btn {
+  background: none !important;
+  border: none !important;
+  cursor: pointer;
+  padding: 4px !important;
+  margin-left: auto !important;
+  opacity: 0;
+  color: var(--text-muted) !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity var(--transition-fast), transform var(--transition-fast), color var(--transition-fast);
+  z-index: 5;
+  outline: none !important;
+}
+
+.sub-nav-item:hover .fav-btn {
+  opacity: 0.5;
+}
+
+.fav-btn:hover {
+  opacity: 1 !important;
+  color: var(--text-primary) !important;
+  transform: scale(1.1);
+}
+
+.fav-btn.is-favorite {
+  opacity: 1 !important;
+  color: #FFFFFF !important;
+}
+
+.fav-btn.is-favorite svg {
+  fill: currentColor;
+}
+
+/* ─── Certificado Digital Card ───────────────────────────── */
+.cert-status {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  font-size: 13px;
+}
+
+.cert-status.cert-ok {
+  background: rgba(16,185,129,0.10);
+  border: 1px solid rgba(16,185,129,0.25);
+  color: #10B981;
+}
+
+.cert-status.cert-none {
+  background: rgba(245,158,11,0.08);
+  border: 1px solid rgba(245,158,11,0.2);
+  color: var(--clr-warning);
+}
+
+.cert-status-title {
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.cert-status-sub {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.cert-upload-area {
+  border: 1.5px dashed var(--border-default);
+  border-radius: var(--radius-md);
+  padding: var(--space-6) var(--space-4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  cursor: pointer;
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+  text-align: center;
+}
+
+.cert-upload-area:hover,
+.cert-upload-area.dragging {
+  border-color: var(--clr-primary);
+  background: rgba(79,110,247,0.05);
+}
+
+.cert-upload-icon {
+  color: var(--text-muted);
+  transition: color var(--transition-fast);
+}
+
+.cert-upload-area:hover .cert-upload-icon,
+.cert-upload-area.dragging .cert-upload-icon {
+  color: var(--clr-primary-light);
+}
+
+.cert-upload-text {
+  font-size: 13px;
+  color: var(--text-secondary);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+}
+
+.cert-file-label {
+  color: var(--clr-primary-light);
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.cert-file-label:hover { color: var(--clr-primary); }
+
+.cert-file-name {
+  font-size: 12px;
+  color: var(--clr-success);
+  margin-top: 2px;
+  font-weight: 500;
+}
+
+.cert-sefaz-section {
+  padding: var(--space-4);
+  background: rgba(79,110,247,0.05);
+  border: 1px solid rgba(79,110,247,0.12);
+  border-radius: var(--radius-md);
+}
+
+.badge-warning {
+  background: rgba(245,158,11,0.18);
+  color: var(--clr-warning);
+  border: 1px solid rgba(245,158,11,0.3);
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.badge-success {
+  background: rgba(16,185,129,0.15);
+  color: var(--clr-success);
+  border: 1px solid rgba(16,185,129,0.25);
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
