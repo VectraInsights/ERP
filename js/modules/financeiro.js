@@ -510,41 +510,32 @@ function afterInadimplentes() {
    5. CONTAS FINANCEIRAS (Bank accounts — full CRUD + OFX + Open Banking)
    ────────────────────────────────────────────────────────── */
 
-// Icons map for known banks
-const BANK_ICONS = {
-  'itaú': '🟠', 'bradesco': '🔴', 'santander': '🔴', 'caixa': '🔵', 'bb': '🟡',
-  'banco do brasil': '🟡', 'inter': '🟠', 'nubank': '🟣', 'c6': '⚫', 'sicoob': '🟢',
-  'sicredi': '🟢', 'safra': '🔵', 'btg': '⚫', 'xp': '⚫', 'nenhum': '💵'
-};
-function bankIcon(b) {
-  const k = (b || '').toLowerCase();
-  for (const [name, icon] of Object.entries(BANK_ICONS)) {
-    if (k.includes(name)) return icon;
-  }
-  return '🏦';
+function bankIcon(banco) {
+  return getBankLogo(banco, 20);
 }
 
 function tipoLabel(t) {
   return { corrente: 'Conta Corrente', poupanca: 'Poupança', caixa: 'Caixa Físico', investimento: 'Investimento', digital: 'Conta Digital' }[t] || t;
 }
 
-function getBankLogo(banco) {
+function getBankLogo(banco, size = 28) {
+  const baseSize = Number(size) || 28;
   const logos = {
-    'Itaú': '<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><defs><linearGradient id="itau-grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#003d82;stop-opacity:1" /><stop offset="100%" style="stop-color:#0066cc;stop-opacity:1" /></linearGradient></defs><rect width="28" height="28" rx="6" fill="url(#itau-grad)"/><text x="14" y="16" font-size="11" font-weight="900" fill="#FFD700" text-anchor="middle" font-family="Arial, sans-serif">Itaú</text></svg>',
-    
-    'Bradesco': '<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><defs><radialGradient id="brad-grad" cx="50%" cy="50%" r="50%"><stop offset="0%" style="stop-color:#ff3333;stop-opacity:1" /><stop offset="100%" style="stop-color:#cc0000;stop-opacity:1" /></radialGradient></defs><rect width="28" height="28" rx="6" fill="url(#brad-grad)"/><circle cx="14" cy="14" r="8" fill="none" stroke="white" stroke-width="2"/><path d="M10 14 Q14 18 18 14" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>',
-    
-    'Santander': '<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><defs><linearGradient id="sant-grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#003d82;stop-opacity:1" /><stop offset="100%" style="stop-color:#0052a3;stop-opacity:1" /></linearGradient></defs><rect width="28" height="28" rx="6" fill="url(#sant-grad)"/><rect x="6" y="8" width="6" height="12" fill="#FF8C00" transform="skewX(-15)"/><rect x="14" y="8" width="6" height="12" fill="white" transform="skewX(-15)"/></svg>',
-    
-    'Caixa': '<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><defs><linearGradient id="caixa-grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#003d7a;stop-opacity:1" /><stop offset="100%" style="stop-color:#004a99;stop-opacity:1" /></linearGradient></defs><rect width="28" height="28" rx="6" fill="url(#caixa-grad)"/><rect x="8" y="10" width="3" height="8" fill="#FFD700"/><rect x="12" y="10" width="3" height="8" fill="#FFD700"/><rect x="16" y="10" width="3" height="8" fill="#FFD700"/></svg>',
-    
-    'Banco do Brasil': '<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><defs><linearGradient id="bb-grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FFCC00;stop-opacity:1" /><stop offset="50%" style="stop-color:#FFD700;stop-opacity:1" /><stop offset="100%" style="stop-color:#FFC700;stop-opacity:1" /></linearGradient></defs><rect width="28" height="28" rx="6" fill="url(#bb-grad)"/><circle cx="10" cy="14" r="4" fill="#003d7a"/><circle cx="18" cy="14" r="4" fill="#003d7a"/></svg>',
-    
-    'Banco Inter': '<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><defs><linearGradient id="inter-grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FF6B00;stop-opacity:1" /><stop offset="100%" style="stop-color:#FF8C00;stop-opacity:1" /></linearGradient></defs><rect width="28" height="28" rx="6" fill="url(#inter-grad)"/><polygon points="8,20 14,8 20,20" fill="#1DB954"/><polygon points="12,20 14,14 16,20" fill="white"/></svg>',
-    
-    'Nubank': '<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><defs><linearGradient id="nu-grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#820AD1;stop-opacity:1" /><stop offset="100%" style="stop-color:#6B0BA8;stop-opacity:1" /></linearGradient></defs><rect width="28" height="28" rx="6" fill="url(#nu-grad)"/><path d="M10 14 Q14 18 18 14 Q18 10 14 10 Q10 10 10 14" fill="white"/></svg>',
-    
-    'C6 Bank': '<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#000000"/><text x="14" y="17" font-size="12" font-weight="bold" fill="#FFD700" text-anchor="middle" font-family="Arial, sans-serif">C6</text></svg>',
+    'Itaú': `<svg width="${baseSize}" height="${baseSize}" viewBox="0 0 28 28" fill="none"><defs><linearGradient id="itau-grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#003d82;stop-opacity:1" /><stop offset="100%" style="stop-color:#0066cc;stop-opacity:1" /></linearGradient></defs><rect width="28" height="28" rx="6" fill="url(#itau-grad)"/><text x="14" y="17" font-size="12" font-weight="900" fill="#FFD700" text-anchor="middle" font-family="Arial, sans-serif">Itaú</text></svg>`,
+    'Bradesco': `<svg width="${baseSize}" height="${baseSize}" viewBox="0 0 28 28" fill="none"><defs><radialGradient id="brad-grad" cx="50%" cy="50%" r="50%"><stop offset="0%" style="stop-color:#ff3333;stop-opacity:1" /><stop offset="100%" style="stop-color:#cc0000;stop-opacity:1" /></radialGradient></defs><rect width="28" height="28" rx="6" fill="url(#brad-grad)"/><path d="M8 8h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2z" fill="none" stroke="white" stroke-width="2"/><path d="M8 14h12" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>`,
+    'Santander': `<svg width="${baseSize}" height="${baseSize}" viewBox="0 0 28 28" fill="none"><defs><linearGradient id="sant-grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#cb1e1e;stop-opacity:1" /><stop offset="100%" style="stop-color:#a50f0f;stop-opacity:1" /></linearGradient></defs><rect width="28" height="28" rx="6" fill="url(#sant-grad)"/><path d="M8 10c0-2 2-4 6-4s6 2 6 4c0 2-2 3-6 4-4 1-6 2-6 4" stroke="white" stroke-width="2" fill="none"/></svg>`,
+    'Caixa': `<svg width="${baseSize}" height="${baseSize}" viewBox="0 0 28 28" fill="none"><defs><linearGradient id="caixa-grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#003d7a;stop-opacity:1" /><stop offset="100%" style="stop-color:#1d4f8b;stop-opacity:1" /></linearGradient></defs><rect width="28" height="28" rx="6" fill="url(#caixa-grad)"/><path d="M9 10h10v8H9z" fill="#ffd600"/><path d="M9 10h10v4H9z" fill="#003d7a"/></svg>`,
+    'Banco do Brasil': `<svg width="${baseSize}" height="${baseSize}" viewBox="0 0 28 28" fill="none"><defs><linearGradient id="bb-grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffd700;stop-opacity:1" /><stop offset="100%" style="stop-color:#ffce00;stop-opacity:1" /></linearGradient></defs><rect width="28" height="28" rx="6" fill="url(#bb-grad)"/><path d="M8 8h4v4H8V8zm8 0h4v4h-4V8z" fill="#003d7a"/><path d="M10 10h8v8h-8V10z" fill="none" stroke="#003d7a" stroke-width="2"/></svg>`,
+    'Banco Inter': `<svg width="${baseSize}" height="${baseSize}" viewBox="0 0 28 28" fill="none"><defs><linearGradient id="inter-grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff7117;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff8d1c;stop-opacity:1" /></linearGradient></defs><rect width="28" height="28" rx="6" fill="url(#inter-grad)"/><path d="M8 20l6-12 6 12" stroke="#0e9349" stroke-width="3" fill="none" stroke-linecap="round"/></svg>`,
+    'Nubank': `<svg width="${baseSize}" height="${baseSize}" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#8300b0"/><path d="M10 12c0-1.5 1-3 4-3s4 1.5 4 3c0 1.5-1 3-4 3s-4-1.5-4-3zm0 0v4c0 1.5 1 3 4 3s4-1.5 4-3v-4" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/></svg>`,
+    'C6 Bank': `<svg width="${baseSize}" height="${baseSize}" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#000"/><text x="14" y="18" font-size="12" font-weight="900" fill="#fff" text-anchor="middle" font-family="Arial, sans-serif">C6</text></svg>`,
+    'Sicoob': `<svg width="${baseSize}" height="${baseSize}" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#1ea915"/><path d="M9 9h10v10H9z" fill="white"/><path d="M10 10h8v8h-8z" fill="#1ea915"/></svg>`,
+    'BTG Pactual': `<svg width="${baseSize}" height="${baseSize}" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#000"/><text x="14" y="18" font-size="11" font-weight="900" fill="#fff" text-anchor="middle" font-family="Arial, sans-serif">BTG</text></svg>`,
+    'Outro': `<svg width="${baseSize}" height="${baseSize}" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#666"/><text x="14" y="18" font-size="12" font-weight="900" fill="#fff" text-anchor="middle" font-family="Arial, sans-serif">?</text></svg>`
+  };
+
+  return logos[banco] || `<svg width="${baseSize}" height="${baseSize}" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#999"/><text x="14" y="18" font-size="12" font-weight="900" fill="#fff" text-anchor="middle" font-family="Arial, sans-serif">🏦</text></svg>`;
+}
     
     'Sicoob': '<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><defs><linearGradient id="sic-grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1EA915;stop-opacity:1" /><stop offset="100%" style="stop-color:#239620;stop-opacity:1" /></linearGradient></defs><rect width="28" height="28" rx="6" fill="url(#sic-grad)"/><circle cx="10" cy="10" r="3" fill="white"/><circle cx="18" cy="10" r="3" fill="white"/><rect x="10" y="15" width="8" height="2" rx="1" fill="white"/></svg>',
     
