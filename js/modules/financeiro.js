@@ -536,15 +536,6 @@ function getBankLogo(banco, size = 28) {
 
   return logos[banco] || `<svg width="${baseSize}" height="${baseSize}" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#999"/><text x="14" y="18" font-size="12" font-weight="900" fill="#fff" text-anchor="middle" font-family="Arial, sans-serif">🏦</text></svg>`;
 }
-    
-    'Sicoob': '<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><defs><linearGradient id="sic-grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1EA915;stop-opacity:1" /><stop offset="100%" style="stop-color:#239620;stop-opacity:1" /></linearGradient></defs><rect width="28" height="28" rx="6" fill="url(#sic-grad)"/><circle cx="10" cy="10" r="3" fill="white"/><circle cx="18" cy="10" r="3" fill="white"/><rect x="10" y="15" width="8" height="2" rx="1" fill="white"/></svg>',
-    
-    'BTG Pactual': '<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#000000"/><text x="14" y="17" font-size="11" font-weight="bold" fill="white" text-anchor="middle" font-family="Arial, sans-serif">BTG</text></svg>',
-    
-    'Nenhum': '<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#666666"/><text x="14" y="18" font-size="14" font-weight="bold" fill="white" text-anchor="middle">💵</text></svg>'
-  };
-  return logos[banco] || `<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#999999"/><text x="14" y="18" font-size="12" font-weight="bold" fill="white" text-anchor="middle">🏦</text></svg>`;
-}
 
 function renderContasFinanceiras() {
   return `
