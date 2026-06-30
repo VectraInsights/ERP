@@ -973,10 +973,10 @@ function _renderCFTable() {
               </div>
             </td>
             <td style="text-align:center">
-              <button class="btn btn-action-sm btn-reconcile-cf" data-id="${c.id}" title="Conciliação Bancária">
+              ${c.conciliada ? `<span class="badge badge-success" title="Conta conciliada em ${fmt.date(c.conciliacaoEm)}">Conciliada</span>` : `<button class="btn btn-action-sm btn-reconcile-cf" data-id="${c.id}" title="Conciliação Bancária">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
                 Reconciliar
-              </button>
+              </button>`}
             </td>
             <td>
               <div class="cf-actions">
@@ -1643,7 +1643,7 @@ function openReconciliationModal(conta) {
           ${contaOFX.length > 0 ? `
             <div class="transaction-list">
               ${contaOFX.map(t => `
-                <div class="transaction-item" onclick="this.classList.toggle('selected')">
+                <div class="transaction-item" data-ofx-id="${t.id}" onclick="this.classList.toggle('selected')">
                   <div class="transaction-info">
                     <div class="transaction-date">${fmt.date(t.vencimento)}</div>
                     <div class="transaction-desc">${t.descricao}</div>
@@ -1670,15 +1670,7 @@ function openReconciliationModal(conta) {
           ${contaLancamentos.length > 0 ? `
             <div class="transaction-list">
               ${contaLancamentos.slice(-20).reverse().map(l => `
-                <div class="transaction-item" onclick="this.classList.toggle('selected')">
-                  <div class="transaction-info">
-                    <div class="transaction-date">${fmt.date(l.vencimento)}</div>
-                    <div class="transaction-desc">${l.descricao}</div>
-                    <div style="font-size:11px;color:var(--text-muted);margin-top:2px">Status: ${l.status}</div>
-                  </div>
-                  <div class="transaction-amount ${l.tipo === 'receita' ? 'credit' : 'debit'}">
-                    ${l.tipo === 'receita' ? '+' : '−'} ${fmt.currency(l.valor)}
-                  </div>
+                <div class="transaction-item" data-lancamento-id="${l.id}" onclick="this.classList.toggle('selected')">
                 </div>
               `).join('')}
             </div>
@@ -1703,6 +1695,38 @@ function openReconciliationModal(conta) {
 }
 
 function saveReconciliation(contaId) {
+  const modalEl = document.getElementById('modal-reconciliation-overlay');
+  if (!modalEl) return;
+
+  const selectedOFX = Array.from(modalEl.querySelectorAll('.transaction-item[data-ofx-id].selected'))
+    .map(el => el.dataset.ofxId);
+  const selectedLancamentos = Array.from(modalEl.querySelectorAll('.transaction-item[data-lancamento-id].selected'))
+    .map(el => el.dataset.lancamentoId);
+
+  const ofxData = JSON.parse(localStorage.getItem('erp_ofx_importados') || '[]');
+  const lancamentos = JSON.parse(localStorage.getItem('erp_lancamentos') || '[]');
+  const contas = JSON.parse(localStorage.getItem('erp_contas_financeiras') || '[]');
+
+  const matchedOFX = ofxData.filter(t => selectedOFX.includes(t.id));
+  const matchedLancamentos = lancamentos.filter(l => selectedLancamentos.includes(l.id));
+
+  // Marca transações selecionadas como conciliadas
+  matchedOFX.forEach(tx => tx.conciliado = true);
+  matchedLancamentos.forEach(l => l.conciliado = true);
+
+  // Atualiza os dados no localStorage
+  const newOFX = ofxData.map(t => selectedOFX.includes(t.id) ? { ...t, conciliado: true } : t);
+  const newLancamentos = lancamentos.map(l => selectedLancamentos.includes(l.id) ? { ...l, conciliado: true } : l);
+  localStorage.setItem('erp_ofx_importados', JSON.stringify(newOFX));
+  localStorage.setItem('erp_lancamentos', JSON.stringify(newLancamentos));
+
+  // Marca a conta financeira como conciliada, se houver correspondência
+  const contaIndex = contas.findIndex(c => c.id === contaId);
+  if (contaIndex > -1) {
+    contas[contaIndex] = { ...contas[contaIndex], conciliada: true, conciliacaoEm: new Date().toISOString() };
+    localStorage.setItem('erp_contas_financeiras', JSON.stringify(contas));
+  }
+
   toast.success('Conciliação Salva', 'Status de conciliação atualizado com sucesso.');
   modal.close();
 }
