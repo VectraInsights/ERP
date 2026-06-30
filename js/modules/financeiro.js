@@ -21,25 +21,36 @@ function setupQuickLaunchShortcuts() {
 
   const handleShortcut = (event) => {
     if (!event.altKey || event.ctrlKey || event.metaKey) return;
-    const key = event.key.toLowerCase();
-    if (key === 'd') {
-      event.preventDefault();
-      const targetHash = '#/financeiro/contas-pagar';
-      if (window.location.hash !== targetHash) {
-        window.location.hash = targetHash;
+    const key = (event.key || '').toLowerCase();
+    const code = event.code || '';
+    const isD = key === 'd' || code === 'KeyD';
+    const isR = key === 'r' || code === 'KeyR';
+
+    const openAfterNavigation = (targetHash, type) => {
+      if (window.location.hash === targetHash) {
+        openForm(type);
+        return;
       }
-      setTimeout(() => openForm('despesa'), 50);
-    } else if (key === 'r') {
+      const onHashChange = () => {
+        if (window.location.hash === targetHash) {
+          openForm(type);
+          window.removeEventListener('hashchange', onHashChange);
+        }
+      };
+      window.addEventListener('hashchange', onHashChange);
+      window.location.hash = targetHash;
+    };
+
+    if (isD) {
       event.preventDefault();
-      const targetHash = '#/financeiro/contas-receber';
-      if (window.location.hash !== targetHash) {
-        window.location.hash = targetHash;
-      }
-      setTimeout(() => openForm('receita'), 50);
+      openAfterNavigation('#/financeiro/contas-pagar', 'despesa');
+    } else if (isR) {
+      event.preventDefault();
+      openAfterNavigation('#/financeiro/contas-receber', 'receita');
     }
   };
 
-  window.addEventListener('keydown', handleShortcut, true);
+  document.addEventListener('keydown', handleShortcut);
 }
 
 // Seed new databases for financial accounts and cost centers if not present
@@ -519,17 +530,17 @@ function normalizeBankName(banco) {
   if (!banco) return 'Nenhum';
   const normalized = String(banco).trim();
   const lower = normalized.toLowerCase();
-  if (/banco do brasil/.test(lower)) return 'Banco do Brasil';
+  if (/banco do brasil|bb\b/.test(lower)) return 'Banco do Brasil';
   if (/banco inter|inter\b/.test(lower)) return 'Banco Inter';
   if (/itau/.test(lower)) return 'Itaú';
   if (/bradesco/.test(lower)) return 'Bradesco';
   if (/santander/.test(lower)) return 'Santander';
-  if (/caixa/.test(lower)) return 'Caixa';
+  if (/caixa econômica|caixa economica|caixa\b/.test(lower)) return 'Caixa';
   if (/nubank/.test(lower)) return 'Nubank';
   if (/c6/.test(lower)) return 'C6 Bank';
   if (/sicoob/.test(lower)) return 'Sicoob';
   if (/btg/.test(lower)) return 'BTG Pactual';
-  if (/nenhum|sem banco|caixa fisico|caixa fisico/i.test(lower)) return 'Nenhum';
+  if (/nenhum|sem banco|caixa fisico|caixa físico|caixa física/i.test(lower)) return 'Nenhum';
   return normalized;
 }
 
@@ -592,6 +603,8 @@ function createCalendarPopover(input) {
       popover.remove();
       popover = null;
       document.removeEventListener('click', outsideClick);
+      window.removeEventListener('resize', repositionPopover);
+      window.removeEventListener('scroll', repositionPopover, true);
     }
   };
 
@@ -599,6 +612,13 @@ function createCalendarPopover(input) {
     if (!popover) return;
     if (event.target === input || popover.contains(event.target)) return;
     removePopover();
+  };
+
+  const repositionPopover = () => {
+    if (!popover) return;
+    const rect = input.getBoundingClientRect();
+    popover.style.top = `${rect.bottom + window.scrollY + 8}px`;
+    popover.style.left = `${rect.left + window.scrollX}px`;
   };
 
   const buildCalendar = (date) => {
@@ -686,10 +706,10 @@ function createCalendarPopover(input) {
     selectedIso = toIsoDate(input.value || formatDateInputValue(null));
     popover = buildCalendar(currentDate);
     document.body.appendChild(popover);
-    const rect = input.getBoundingClientRect();
-    popover.style.top = `${rect.bottom + window.scrollY + 8}px`;
-    popover.style.left = `${rect.left + window.scrollX}px`;
+    repositionPopover();
     document.addEventListener('click', outsideClick);
+    window.addEventListener('resize', repositionPopover);
+    window.addEventListener('scroll', repositionPopover, true);
   };
 
   input.addEventListener('click', openPopover);
