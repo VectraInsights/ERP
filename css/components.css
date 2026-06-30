@@ -1009,3 +1009,65 @@ table.data-table {
 }
 
 .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ─── Modal Large ─────────────────────────────────────────── */
+.modal-lg {
+  width: min(820px, 96vw);
+}
+
+/* ─── Open Banking Step Indicator ────────────────────────── */
+.ob-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.ob-step-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--border-subtle);
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-normal);
+}
+
+.ob-step-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  font-weight: 500;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.ob-step-active .ob-step-num {
+  background: var(--clr-primary);
+  color: #fff;
+  box-shadow: 0 0 0 4px rgba(79, 110, 247, 0.2);
+}
+
+.ob-step-active .ob-step-label {
+  color: var(--clr-primary-light);
+  font-weight: 600;
+}
+
+/* ─── CF Card hover effect ────────────────────────────────── */
+.cf-card {
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.cf-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+}
+
+/* ─── Dropzone hover effect ───────────────────────────────── */
+#ofx-dropzone:hover {
+  border-color: var(--clr-primary-light);
+  background: rgba(79, 110, 247, 0.04);
+}
