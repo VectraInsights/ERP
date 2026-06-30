@@ -20,7 +20,7 @@ function setupQuickLaunchShortcuts() {
   globalShortcutsBound = true;
 
   const handleShortcut = (event) => {
-    if (!event.altKey || event.ctrlKey || event.metaKey) return;
+    if (!event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
     const key = (event.key || '').toLowerCase();
     const code = event.code || '';
     const isD = key === 'd' || code === 'KeyD';
@@ -50,7 +50,7 @@ function setupQuickLaunchShortcuts() {
     }
   };
 
-  document.addEventListener('keydown', handleShortcut);
+  document.addEventListener('keydown', handleShortcut, true);
 }
 
 // Seed new databases for financial accounts and cost centers if not present
@@ -1729,6 +1729,8 @@ function saveReconciliation(contaId) {
 
   toast.success('Conciliação Salva', 'Status de conciliação atualizado com sucesso.');
   modal.close();
+  _renderCFTable();
+  _renderCFSummary();
 }
 
 /* ──────────────────────────────────────────────────────────
