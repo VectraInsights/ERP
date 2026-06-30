@@ -69,6 +69,76 @@
   flex-shrink: 0;
 }
 
+.calendar-popover {
+  position: absolute;
+  z-index: 9999;
+  width: 280px;
+  padding: var(--space-4);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  box-shadow: 0 24px 60px rgba(0,0,0,.18);
+}
+
+.calendar-header,
+.calendar-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.calendar-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-transform: capitalize;
+}
+
+.calendar-weekdays,
+.calendar-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.calendar-weekdays div {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.calendar-day {
+  width: 100%;
+  aspect-ratio: 1;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background .2s ease, color .2s ease;
+}
+
+.calendar-day.disabled {
+  opacity: .35;
+  cursor: default;
+}
+
+.calendar-day:hover:not(.disabled) {
+  background: rgba(79, 110, 247, .12);
+}
+
+.calendar-day.selected {
+  background: var(--clr-primary-light);
+  color: #fff;
+}
+
+.custom-date-picker {
+  cursor: pointer;
+}
+
 /* ─── Badges de Conta ─────────────────────────────────────── */
 .account-type-badge {
   display: inline-block;

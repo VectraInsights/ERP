@@ -19,9 +19,8 @@ function setupQuickLaunchShortcuts() {
   if (globalShortcutsBound) return;
   globalShortcutsBound = true;
 
-  document.addEventListener('keydown', (event) => {
+  const handleShortcut = (event) => {
     if (!event.altKey || event.ctrlKey || event.metaKey) return;
-
     const key = event.key.toLowerCase();
     if (key === 'd') {
       event.preventDefault();
@@ -38,7 +37,9 @@ function setupQuickLaunchShortcuts() {
       }
       setTimeout(() => openForm('receita'), 50);
     }
-  });
+  };
+
+  window.addEventListener('keydown', handleShortcut, true);
 }
 
 // Seed new databases for financial accounts and cost centers if not present
@@ -558,7 +559,23 @@ function getBankLogo(banco, size = 28) {
 }
 
 function formatDateInputValue(iso) {
-  return iso ? iso : today();
+  return iso ? fmt.date(iso) : fmt.date(today());
+}
+
+function parseDateValue(value) {
+  if (!value) return new Date();
+  const displayMatch = value.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+  if (displayMatch) {
+    const [, day, month, year] = displayMatch;
+    const date = new Date(`${year}-${month}-${day}`);
+    if (!isNaN(date.getTime())) return date;
+  }
+  const date = new Date(value);
+  return isNaN(date.getTime()) ? new Date() : date;
+}
+
+function toIsoDate(value) {
+  return parseDateValue(value).toISOString().split('T')[0];
 }
 
 function createCalendarPopover(input) {
@@ -566,8 +583,8 @@ function createCalendarPopover(input) {
   input.readOnly = true;
   input.classList.add('custom-date-picker');
 
-  let currentDate = parseDateValue(input.value || today());
-  let selectedIso = input.value || today();
+  let currentDate = parseDateValue(input.value || formatDateInputValue(null));
+  let selectedIso = toIsoDate(input.value || formatDateInputValue(null));
   let popover = null;
 
   const removePopover = () => {
@@ -625,7 +642,7 @@ function createCalendarPopover(input) {
       dayEl.addEventListener('click', () => {
         if (day.getMonth() !== month) return;
         selectedIso = iso;
-        input.value = selectedIso;
+        input.value = fmt.date(selectedIso);
         input.dispatchEvent(new Event('change', { bubbles: true }));
         removePopover();
       });
@@ -653,7 +670,8 @@ function createCalendarPopover(input) {
     });
 
     wrapper.querySelector('[data-action="today"]').addEventListener('click', () => {
-      const todayValue = today();
+      const todayValue = fmt.date(today());
+      selectedIso = today();
       input.value = todayValue;
       input.dispatchEvent(new Event('change', { bubbles: true }));
       removePopover();
@@ -664,8 +682,8 @@ function createCalendarPopover(input) {
 
   const openPopover = () => {
     removePopover();
-    currentDate = parseDateValue(input.value || today());
-    selectedIso = input.value || today();
+    currentDate = parseDateValue(input.value || formatDateInputValue(null));
+    selectedIso = toIsoDate(input.value || formatDateInputValue(null));
     popover = buildCalendar(currentDate);
     document.body.appendChild(popover);
     const rect = input.getBoundingClientRect();
@@ -681,11 +699,6 @@ function createCalendarPopover(input) {
       openPopover();
     }
   });
-}
-
-function parseDateValue(value) {
-  const date = new Date(value);
-  return isNaN(date.getTime()) ? new Date() : date;
 }
 
 function renderContasFinanceiras() {
@@ -1997,7 +2010,7 @@ function openForm(tipo, data = null) {
           </div>
           <div class="form-group">
             <label class="form-label">Vencimento <span class="required">*</span></label>
-            <input type="text" class="form-control" name="vencimento" value="${formatDateInputValue(data ? data.vencimento : today())}" placeholder="AAAA-MM-DD" required readonly>
+            <input type="text" class="form-control" name="vencimento" value="${formatDateInputValue(data ? data.vencimento : today())}" placeholder="DD/MM/AAAA" required readonly>
           </div>
         </div>
         <div class="form-row">
