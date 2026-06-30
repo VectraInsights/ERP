@@ -529,18 +529,25 @@ function bankIcon(banco) {
 function normalizeBankName(banco) {
   if (!banco) return 'Nenhum';
   const normalized = String(banco).trim();
-  const lower = normalized.toLowerCase();
-  if (/banco do brasil|bb\b/.test(lower)) return 'Banco do Brasil';
-  if (/banco inter|inter\b/.test(lower)) return 'Banco Inter';
-  if (/itau/.test(lower)) return 'Itaú';
-  if (/bradesco/.test(lower)) return 'Bradesco';
-  if (/santander/.test(lower)) return 'Santander';
-  if (/caixa econômica|caixa economica|caixa\b/.test(lower)) return 'Caixa';
-  if (/nubank/.test(lower)) return 'Nubank';
-  if (/c6/.test(lower)) return 'C6 Bank';
-  if (/sicoob/.test(lower)) return 'Sicoob';
-  if (/btg/.test(lower)) return 'BTG Pactual';
-  if (/nenhum|sem banco|caixa fisico|caixa físico|caixa física/i.test(lower)) return 'Nenhum';
+  const lower = normalized.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  const mapping = [
+    [/\bbanco do brasil\b|\bbb\b/, 'Banco do Brasil'],
+    [/\bbanco inter\b|\binter\b/, 'Banco Inter'],
+    [/\bitau\b|banco itau/, 'Itaú'],
+    [/bradesco/, 'Bradesco'],
+    [/santander/, 'Santander'],
+    [/caixa (economica|economica federal)?|\bcaixa\b/, 'Caixa'],
+    [/nubank/, 'Nubank'],
+    [/\bc6\b|c6 bank/, 'C6 Bank'],
+    [/sicoob/, 'Sicoob'],
+    [/btg/, 'BTG Pactual'],
+    [/nenhum|sem banco|caixa fisico|caixa fisica/, 'Nenhum']
+  ];
+
+  for (const [pattern, bank] of mapping) {
+    if (pattern.test(lower)) return bank;
+  }
+
   return normalized;
 }
 
@@ -550,14 +557,16 @@ function tipoLabel(t) {
 
 function getBankLogo(banco, size = 28) {
   const baseSize = Number(size) || 28;
+  const uid = Math.random().toString(36).slice(2, 8);
   const bankKey = normalizeBankName(banco);
+  const normalizedBank = String(banco || '').trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
   const logos = {
-    'Itaú': `<svg width="${baseSize}" height="${baseSize}" viewBox="0 0 28 28" fill="none"><defs><linearGradient id="itau-grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#003d82;stop-opacity:1" /><stop offset="100%" style="stop-color:#0066cc;stop-opacity:1" /></linearGradient></defs><rect width="28" height="28" rx="6" fill="url(#itau-grad)"/><text x="14" y="17" font-size="12" font-weight="900" fill="#FFD700" text-anchor="middle" font-family="Arial, sans-serif">Itaú</text></svg>`,
-    'Bradesco': `<svg width="${baseSize}" height="${baseSize}" viewBox="0 0 28 28" fill="none"><defs><radialGradient id="brad-grad" cx="50%" cy="50%" r="50%"><stop offset="0%" style="stop-color:#ff3333;stop-opacity:1" /><stop offset="100%" style="stop-color:#cc0000;stop-opacity:1" /></radialGradient></defs><rect width="28" height="28" rx="6" fill="url(#brad-grad)"/><path d="M8 8h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2z" fill="none" stroke="white" stroke-width="2"/><path d="M8 14h12" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>`,
-    'Santander': `<svg width="${baseSize}" height="${baseSize}" viewBox="0 0 28 28" fill="none"><defs><linearGradient id="sant-grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#cb1e1e;stop-opacity:1" /><stop offset="100%" style="stop-color:#a50f0f;stop-opacity:1" /></linearGradient></defs><rect width="28" height="28" rx="6" fill="url(#sant-grad)"/><path d="M8 10c0-2 2-4 6-4s6 2 6 4c0 2-2 3-6 4-4 1-6 2-6 4" stroke="white" stroke-width="2" fill="none"/></svg>`,
-    'Caixa': `<svg width="${baseSize}" height="${baseSize}" viewBox="0 0 28 28" fill="none"><defs><linearGradient id="caixa-grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#003d7a;stop-opacity:1" /><stop offset="100%" style="stop-color:#1d4f8b;stop-opacity:1" /></linearGradient></defs><rect width="28" height="28" rx="6" fill="url(#caixa-grad)"/><path d="M9 10h10v8H9z" fill="#ffd600"/><path d="M9 10h10v4H9z" fill="#003d7a"/></svg>`,
-    'Banco do Brasil': `<svg width="${baseSize}" height="${baseSize}" viewBox="0 0 28 28" fill="none"><defs><linearGradient id="bb-grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffd700;stop-opacity:1" /><stop offset="100%" style="stop-color:#ffce00;stop-opacity:1" /></linearGradient></defs><rect width="28" height="28" rx="6" fill="url(#bb-grad)"/><path d="M8 8h4v4H8V8zm8 0h4v4h-4V8z" fill="#003d7a"/><path d="M10 10h8v8h-8V10z" fill="none" stroke="#003d7a" stroke-width="2"/></svg>`,
-    'Banco Inter': `<svg width="${baseSize}" height="${baseSize}" viewBox="0 0 28 28" fill="none"><defs><linearGradient id="inter-grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff7117;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff8d1c;stop-opacity:1" /></linearGradient></defs><rect width="28" height="28" rx="6" fill="url(#inter-grad)"/><path d="M8 20l6-12 6 12" stroke="#0e9349" stroke-width="3" fill="none" stroke-linecap="round"/></svg>`,
+    'Itaú': `<svg width="${baseSize}" height="${baseSize}" viewBox="0 0 28 28" fill="none"><defs><linearGradient id="itau-grad-${uid}" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#003d82;stop-opacity:1" /><stop offset="100%" style="stop-color:#0066cc;stop-opacity:1" /></linearGradient></defs><rect width="28" height="28" rx="6" fill="url(#itau-grad-${uid})"/><text x="14" y="17" font-size="12" font-weight="900" fill="#FFD700" text-anchor="middle" font-family="Arial, sans-serif">Itaú</text></svg>`,
+    'Bradesco': `<svg width="${baseSize}" height="${baseSize}" viewBox="0 0 28 28" fill="none"><defs><radialGradient id="brad-grad-${uid}" cx="50%" cy="50%" r="50%"><stop offset="0%" style="stop-color:#ff3333;stop-opacity:1" /><stop offset="100%" style="stop-color:#cc0000;stop-opacity:1" /></radialGradient></defs><rect width="28" height="28" rx="6" fill="url(#brad-grad-${uid})"/><path d="M8 8h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2z" fill="none" stroke="white" stroke-width="2"/><path d="M8 14h12" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>`,
+    'Santander': `<svg width="${baseSize}" height="${baseSize}" viewBox="0 0 28 28" fill="none"><defs><linearGradient id="sant-grad-${uid}" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#cb1e1e;stop-opacity:1" /><stop offset="100%" style="stop-color:#a50f0f;stop-opacity:1" /></linearGradient></defs><rect width="28" height="28" rx="6" fill="url(#sant-grad-${uid})"/><path d="M8 10c0-2 2-4 6-4s6 2 6 4c0 2-2 3-6 4-4 1-6 2-6 4" stroke="white" stroke-width="2" fill="none"/></svg>`,
+    'Caixa': `<svg width="${baseSize}" height="${baseSize}" viewBox="0 0 28 28" fill="none"><defs><linearGradient id="caixa-grad-${uid}" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#003d7a;stop-opacity:1" /><stop offset="100%" style="stop-color:#1d4f8b;stop-opacity:1" /></linearGradient></defs><rect width="28" height="28" rx="6" fill="url(#caixa-grad-${uid})"/><path d="M9 10h10v8H9z" fill="#ffd600"/><path d="M9 10h10v4H9z" fill="#003d7a"/></svg>`,
+    'Banco do Brasil': `<svg width="${baseSize}" height="${baseSize}" viewBox="0 0 28 28" fill="none"><defs><linearGradient id="bb-grad-${uid}" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffd700;stop-opacity:1" /><stop offset="100%" style="stop-color:#ffce00;stop-opacity:1" /></linearGradient></defs><rect width="28" height="28" rx="6" fill="url(#bb-grad-${uid})"/><path d="M8 8h4v4H8V8zm8 0h4v4h-4V8z" fill="#003d7a"/><path d="M10 10h8v8h-8V10z" fill="none" stroke="#003d7a" stroke-width="2"/></svg>`,
+    'Banco Inter': `<svg width="${baseSize}" height="${baseSize}" viewBox="0 0 28 28" fill="none"><defs><linearGradient id="inter-grad-${uid}" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff7117;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff8d1c;stop-opacity:1" /></linearGradient></defs><rect width="28" height="28" rx="6" fill="url(#inter-grad-${uid})"/><path d="M8 20l6-12 6 12" stroke="#0e9349" stroke-width="3" fill="none" stroke-linecap="round"/></svg>`,
     'Nubank': `<svg width="${baseSize}" height="${baseSize}" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#8300b0"/><path d="M10 12c0-1.5 1-3 4-3s4 1.5 4 3c0 1.5-1 3-4 3s-4-1.5-4-3zm0 0v4c0 1.5 1 3 4 3s4-1.5 4-3v-4" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/></svg>`,
     'C6 Bank': `<svg width="${baseSize}" height="${baseSize}" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#000"/><text x="14" y="18" font-size="12" font-weight="900" fill="#fff" text-anchor="middle" font-family="Arial, sans-serif">C6</text></svg>`,
     'Sicoob': `<svg width="${baseSize}" height="${baseSize}" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#1ea915"/><path d="M9 9h10v10H9z" fill="white"/><path d="M10 10h8v8h-8z" fill="#1ea915"/></svg>`,
@@ -1863,17 +1872,54 @@ function renderCategorias() {
 }
 
 function afterCategorias() {
-  const list = DB.getAll('planoContas');
   const container = document.getElementById('cat-table-container');
   if (!container) return;
 
-  const cols = [
-    { label: 'Código', render: (row) => `<code style="font-weight:700">${row.codigo}</code>` },
-    { label: 'Nome da Categoria', key: 'nome' },
-    { label: 'Natureza', render: (row) => `<span class="badge ${row.tipo==='receita'?'badge-success':'badge-danger'}">${row.tipo.toUpperCase()}</span>` }
-  ];
+  let sortKey = 'codigo';
+  let sortAsc = true;
 
-  container.innerHTML = buildTable(cols, list, 'Nenhuma categoria cadastrada.');
+  const compare = (a, b) => {
+    if (a == null) return -1;
+    if (b == null) return 1;
+    return String(a).localeCompare(String(b), 'pt-BR', { numeric: true, sensitivity: 'base' });
+  };
+
+  const renderTable = () => {
+    const list = DB.getAll('planoContas').slice();
+    list.sort((a, b) => {
+      const left = a[sortKey];
+      const right = b[sortKey];
+      return (compare(left, right) || compare(a.nome, b.nome)) * (sortAsc ? 1 : -1);
+    });
+
+    const cols = [
+      { label: 'Código', key: 'codigo', sortable: true, render: (row) => `<code style="font-weight:700">${row.codigo}</code>` },
+      { label: 'Nome da Categoria', key: 'nome', sortable: true },
+      { label: 'Natureza', key: 'tipo', sortable: true, render: (row) => `<span class="badge ${row.tipo==='receita'?'badge-success':'badge-danger'}">${row.tipo.toUpperCase()}</span>` }
+    ];
+
+    container.innerHTML = buildTable(cols, list, 'Nenhuma categoria cadastrada.');
+
+    container.querySelectorAll('thead th').forEach((th, index) => {
+      const column = cols[index];
+      if (!column.sortable) return;
+      th.classList.add('sortable');
+      th.title = 'Clique para ordenar';
+      th.classList.toggle('sort-asc', sortKey === column.key && sortAsc);
+      th.classList.toggle('sort-desc', sortKey === column.key && !sortAsc);
+      th.addEventListener('click', () => {
+        if (sortKey === column.key) {
+          sortAsc = !sortAsc;
+        } else {
+          sortKey = column.key;
+          sortAsc = true;
+        }
+        renderTable();
+      });
+    });
+  };
+
+  renderTable();
 
   document.getElementById('btn-add-cat-f')?.addEventListener('click', () => {
     modal.open({
