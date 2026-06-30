@@ -1,0 +1,390 @@
+/* ============================================================
+   FINANCEIRO.CSS — Contas Financeiras & Conciliação
+   ============================================================ */
+
+/* ─── Tabela de Contas Financeiras ────────────────────────── */
+.cf-table-wrapper {
+  background: var(--bg-card);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.cf-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.cf-table thead {
+  background: linear-gradient(to right, rgba(79, 110, 247, 0.08), rgba(124, 58, 237, 0.08));
+  border-bottom: 2px solid var(--border-strong);
+}
+
+.cf-table th {
+  padding: var(--space-4);
+  text-align: left;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+}
+
+.cf-table tbody tr {
+  border-bottom: 1px solid var(--border-subtle);
+  transition: background var(--transition-fast);
+}
+
+.cf-table tbody tr:hover {
+  background: var(--bg-hover);
+}
+
+.cf-table td {
+  padding: var(--space-4);
+  vertical-align: middle;
+}
+
+/* ─── Logo do Banco ───────────────────────────────────────── */
+.bank-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.bank-logo img {
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  object-fit: contain;
+  background: white;
+  padding: 2px;
+}
+
+.bank-logo svg {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+}
+
+/* ─── Badges de Conta ─────────────────────────────────────── */
+.account-type-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  background: rgba(79, 110, 247, 0.15);
+  border: 1px solid rgba(79, 110, 247, 0.3);
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--clr-primary-light);
+  text-transform: capitalize;
+}
+
+.account-type-badge.poupanca {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.3);
+  color: var(--clr-success);
+}
+
+.account-type-badge.caixa {
+  background: rgba(245, 158, 11, 0.15);
+  border-color: rgba(245, 158, 11, 0.3);
+  color: var(--clr-warning);
+}
+
+/* ─── Saldo com cor ───────────────────────────────────────── */
+.account-balance {
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.account-balance.positive {
+  color: var(--clr-success);
+}
+
+.account-balance.negative {
+  color: var(--clr-danger);
+}
+
+/* ─── Botões de ação ──────────────────────────────────────── */
+.cf-actions {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.btn-action-sm {
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.btn-action-sm:hover {
+  background: var(--bg-hover);
+  border-color: var(--border-default);
+  color: var(--text-primary);
+}
+
+.btn-action-sm.danger {
+  color: var(--clr-danger);
+}
+
+.btn-action-sm.danger:hover {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: var(--clr-danger);
+}
+
+/* ─── Conciliação Bancária ────────────────────────────────── */
+.reconciliation-panel {
+  background: linear-gradient(135deg, rgba(79, 110, 247, 0.08), rgba(124, 58, 237, 0.08));
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+  margin-top: var(--space-6);
+}
+
+.reconciliation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.reconciliation-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.reconciliation-status {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+}
+
+.status-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* ─── Info boxes ──────────────────────────────────────────── */
+.cf-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+}
+
+.cf-info-box {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+}
+
+.cf-info-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.cf-info-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* ─── Modal de Conciliação ────────────────────────────────── */
+.reconciliation-modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.reconciliation-section {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+}
+
+.reconciliation-section-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: var(--space-3);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.transaction-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.transaction-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-3);
+  background: var(--bg-base);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.transaction-item:hover {
+  background: var(--bg-hover);
+  border-color: var(--clr-primary);
+}
+
+.transaction-item.selected {
+  background: rgba(79, 110, 247, 0.2);
+  border-color: var(--clr-primary);
+}
+
+.transaction-info {
+  flex: 1;
+}
+
+.transaction-date {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-bottom: 2px;
+}
+
+.transaction-desc {
+  font-size: 13px;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.transaction-amount {
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.transaction-amount.credit {
+  color: var(--clr-success);
+}
+
+.transaction-amount.debit {
+  color: var(--clr-danger);
+}
+
+/* ─── Summary Cards ───────────────────────────────────────── */
+.summary-card-small {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.summary-card-icon {
+  font-size: 24px;
+}
+
+.summary-card-content {
+  flex: 1;
+}
+
+.summary-card-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.summary-card-value {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 2px;
+}
+
+/* ─── Empty state ─────────────────────────────────────────── */
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: var(--space-10);
+  color: var(--text-muted);
+}
+
+.empty-state svg {
+  width: 48px;
+  height: 48px;
+  margin-bottom: var(--space-3);
+  opacity: 0.5;
+}
+
+.empty-state p {
+  font-size: 14px;
+  margin-bottom: var(--space-3);
+}
+
+/* ─── Responsive ──────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .cf-table {
+    font-size: 12px;
+  }
+
+  .cf-table th,
+  .cf-table td {
+    padding: var(--space-3);
+  }
+
+  .bank-logo img {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .cf-actions {
+    flex-wrap: wrap;
+  }
+
+  .btn-action-sm {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+}

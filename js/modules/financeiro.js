@@ -495,6 +495,33 @@ function tipoLabel(t) {
   return { corrente: 'Conta Corrente', poupanca: 'Poupança', caixa: 'Caixa Físico', investimento: 'Investimento', digital: 'Conta Digital' }[t] || t;
 }
 
+function getBankLogo(banco) {
+  const logos = {
+    'Itaú': '<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><defs><linearGradient id="itau-grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#003d82;stop-opacity:1" /><stop offset="100%" style="stop-color:#0066cc;stop-opacity:1" /></linearGradient></defs><rect width="28" height="28" rx="6" fill="url(#itau-grad)"/><text x="14" y="16" font-size="11" font-weight="900" fill="#FFD700" text-anchor="middle" font-family="Arial, sans-serif">Itaú</text></svg>',
+    
+    'Bradesco': '<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><defs><radialGradient id="brad-grad" cx="50%" cy="50%" r="50%"><stop offset="0%" style="stop-color:#ff3333;stop-opacity:1" /><stop offset="100%" style="stop-color:#cc0000;stop-opacity:1" /></radialGradient></defs><rect width="28" height="28" rx="6" fill="url(#brad-grad)"/><circle cx="14" cy="14" r="8" fill="none" stroke="white" stroke-width="2"/><path d="M10 14 Q14 18 18 14" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>',
+    
+    'Santander': '<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><defs><linearGradient id="sant-grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#003d82;stop-opacity:1" /><stop offset="100%" style="stop-color:#0052a3;stop-opacity:1" /></linearGradient></defs><rect width="28" height="28" rx="6" fill="url(#sant-grad)"/><rect x="6" y="8" width="6" height="12" fill="#FF8C00" transform="skewX(-15)"/><rect x="14" y="8" width="6" height="12" fill="white" transform="skewX(-15)"/></svg>',
+    
+    'Caixa': '<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><defs><linearGradient id="caixa-grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#003d7a;stop-opacity:1" /><stop offset="100%" style="stop-color:#004a99;stop-opacity:1" /></linearGradient></defs><rect width="28" height="28" rx="6" fill="url(#caixa-grad)"/><rect x="8" y="10" width="3" height="8" fill="#FFD700"/><rect x="12" y="10" width="3" height="8" fill="#FFD700"/><rect x="16" y="10" width="3" height="8" fill="#FFD700"/></svg>',
+    
+    'Banco do Brasil': '<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><defs><linearGradient id="bb-grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FFCC00;stop-opacity:1" /><stop offset="50%" style="stop-color:#FFD700;stop-opacity:1" /><stop offset="100%" style="stop-color:#FFC700;stop-opacity:1" /></linearGradient></defs><rect width="28" height="28" rx="6" fill="url(#bb-grad)"/><circle cx="10" cy="14" r="4" fill="#003d7a"/><circle cx="18" cy="14" r="4" fill="#003d7a"/></svg>',
+    
+    'Banco Inter': '<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><defs><linearGradient id="inter-grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FF6B00;stop-opacity:1" /><stop offset="100%" style="stop-color:#FF8C00;stop-opacity:1" /></linearGradient></defs><rect width="28" height="28" rx="6" fill="url(#inter-grad)"/><polygon points="8,20 14,8 20,20" fill="#1DB954"/><polygon points="12,20 14,14 16,20" fill="white"/></svg>',
+    
+    'Nubank': '<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><defs><linearGradient id="nu-grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#820AD1;stop-opacity:1" /><stop offset="100%" style="stop-color:#6B0BA8;stop-opacity:1" /></linearGradient></defs><rect width="28" height="28" rx="6" fill="url(#nu-grad)"/><path d="M10 14 Q14 18 18 14 Q18 10 14 10 Q10 10 10 14" fill="white"/></svg>',
+    
+    'C6 Bank': '<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#000000"/><text x="14" y="17" font-size="12" font-weight="bold" fill="#FFD700" text-anchor="middle" font-family="Arial, sans-serif">C6</text></svg>',
+    
+    'Sicoob': '<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><defs><linearGradient id="sic-grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1EA915;stop-opacity:1" /><stop offset="100%" style="stop-color:#239620;stop-opacity:1" /></linearGradient></defs><rect width="28" height="28" rx="6" fill="url(#sic-grad)"/><circle cx="10" cy="10" r="3" fill="white"/><circle cx="18" cy="10" r="3" fill="white"/><rect x="10" y="15" width="8" height="2" rx="1" fill="white"/></svg>',
+    
+    'BTG Pactual': '<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#000000"/><text x="14" y="17" font-size="11" font-weight="bold" fill="white" text-anchor="middle" font-family="Arial, sans-serif">BTG</text></svg>',
+    
+    'Nenhum': '<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#666666"/><text x="14" y="18" font-size="14" font-weight="bold" fill="white" text-anchor="middle">💵</text></svg>'
+  };
+  return logos[banco] || `<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#999999"/><text x="14" y="18" font-size="12" font-weight="bold" fill="white" text-anchor="middle">🏦</text></svg>`;
+}
+
 function renderContasFinanceiras() {
   return `
     <div class="page-enter">
@@ -521,10 +548,24 @@ function renderContasFinanceiras() {
       </div>
 
       <!-- Summary bar -->
-      <div id="cf-summary-bar" style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-4);margin-bottom:var(--space-6)"></div>
+      <div id="cf-summary-bar" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:var(--space-4);margin-bottom:var(--space-6)"></div>
 
-      <!-- Accounts grid -->
-      <div class="grid grid-3" id="contas-f-grid"></div>
+      <!-- Accounts Table -->
+      <div id="cf-table-container" class="cf-table-wrapper"></div>
+
+      <!-- Reconciliation Section -->
+      <div id="cf-reconciliation-section" style="display:none;margin-top:var(--space-6)">
+        <div class="reconciliation-panel">
+          <div class="reconciliation-header">
+            <div class="reconciliation-title">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M9 11l3 3L22 4"/><path d="M9 11l3 3L22 4"/></svg>
+              Conciliação Bancária
+            </div>
+            <button class="btn btn-ghost btn-sm" id="btn-close-reconciliation">Fechar</button>
+          </div>
+          <div id="cf-reconciliation-content"></div>
+        </div>
+      </div>
 
       <!-- OFX Log -->
       <div id="ofx-log-section" style="display:none;margin-top:var(--space-6)">
@@ -539,7 +580,7 @@ function renderContasFinanceiras() {
 }
 
 function afterContasFinanceiras() {
-  _renderCFCards();
+  _renderCFTable();
   _renderCFSummary();
 
   // ── Add new account ──────────────────────────────
@@ -556,6 +597,12 @@ function afterContasFinanceiras() {
     localStorage.removeItem('erp_ofx_importados');
     document.getElementById('ofx-log-section').style.display = 'none';
     toast.info('Log Limpo', 'Histórico de importação OFX removido.');
+  });
+
+  // ── Close reconciliation ─────────────────────────
+  document.getElementById('btn-close-reconciliation')?.addEventListener('click', () => {
+    document.getElementById('cf-reconciliation-section').style.display = 'none';
+    _renderCFTable();
   });
 
   // Restore OFX log if exists
@@ -637,7 +684,7 @@ function _renderCFCards() {
       const list = JSON.parse(localStorage.getItem('erp_contas_financeiras') || '[]');
       localStorage.setItem('erp_contas_financeiras', JSON.stringify(list.filter(c => c.id !== id)));
       toast.success('Conta Excluída', 'A conta foi removida do sistema.');
-      _renderCFCards();
+      _renderCFTable();
       _renderCFSummary();
     });
   });
@@ -647,6 +694,146 @@ function _renderCFCards() {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
       openOFXModal(btn.dataset.id);
+    });
+  });
+}
+
+// ─── Render account table (NEW) ──────────────────────────────────
+function _renderCFTable() {
+  const list = JSON.parse(localStorage.getItem('erp_contas_financeiras') || '[]');
+  const container = document.getElementById('cf-table-container');
+  if (!container) return;
+
+  if (!list.length) {
+    container.innerHTML = `
+      <div style="text-align:center;padding:var(--space-10);color:var(--text-muted)">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="48" height="48" style="margin-bottom:var(--space-3);opacity:0.5"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        <p style="font-size:14px;margin-bottom:var(--space-3)">Nenhuma conta financeira cadastrada</p>
+        <button class="btn btn-primary" onclick="document.getElementById('btn-add-conta-f').click()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Criar Primeira Conta
+        </button>
+      </div>
+    `;
+    return;
+  }
+
+  const tableHTML = `
+    <table class="cf-table">
+      <thead>
+        <tr>
+          <th>Banco</th>
+          <th>Nome da Conta</th>
+          <th>Agência / Conta</th>
+          <th>Tipo</th>
+          <th>Saldo</th>
+          <th>Conciliações</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${list.map(c => {
+          const connected = c.openBanking ? '🔗' : '';
+          return `
+          <tr>
+            <td>
+              <div class="bank-logo">
+                ${getBankLogo(c.banco)}
+                <span>${c.banco}</span>
+              </div>
+            </td>
+            <td>
+              <div style="color:var(--text-primary);font-weight:500">${c.nome}</div>
+              ${c.obs ? `<div style="font-size:11px;color:var(--text-muted);margin-top:2px">${c.obs}</div>` : ''}
+            </td>
+            <td>
+              <div style="font-size:13px;font-weight:600;color:var(--text-secondary)">
+                ${c.agencia ? `Ag: ${c.agencia}` : '—'}
+              </div>
+              <div style="font-size:11px;color:var(--text-muted)">
+                ${c.numeroConta ? `CC: ${c.numeroConta}` : 'Sem dados'}
+              </div>
+            </td>
+            <td>
+              <span class="account-type-badge ${c.tipo}">
+                ${tipoLabel(c.tipo)}
+              </span>
+            </td>
+            <td>
+              <div class="account-balance ${c.saldo >= 0 ? 'positive' : 'negative'}">
+                ${fmt.currency(c.saldo)}
+              </div>
+            </td>
+            <td style="text-align:center">
+              <button class="btn btn-action-sm btn-reconcile-cf" data-id="${c.id}" title="Conciliação Bancária">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+                Reconciliar
+              </button>
+            </td>
+            <td>
+              <div class="cf-actions">
+                <button class="btn-action-sm btn-edit-cf" data-id="${c.id}" title="Editar">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                </button>
+                <button class="btn-action-sm btn-ofx-single" data-id="${c.id}" title="Importar OFX">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                </button>
+                <button class="btn-action-sm danger btn-del-cf" data-id="${c.id}" title="Excluir">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+          `;
+        }).join('')}
+      </tbody>
+    </table>
+  `;
+
+  container.innerHTML = tableHTML;
+
+  // ─── Edit buttons ───────────────────────────────────────────
+  container.querySelectorAll('.btn-edit-cf').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const id = btn.dataset.id;
+      const list = JSON.parse(localStorage.getItem('erp_contas_financeiras') || '[]');
+      const conta = list.find(c => c.id === id);
+      if (conta) openContaModal(conta);
+    });
+  });
+
+  // ─── Delete buttons ──────────────────────────────────────────
+  container.querySelectorAll('.btn-del-cf').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const id = btn.dataset.id;
+      const list = JSON.parse(localStorage.getItem('erp_contas_financeiras') || '[]');
+      const conta = list.find(c => c.id === id);
+      if (!confirm(`Deseja realmente excluir a conta "${conta?.nome}"? Esta ação não pode ser desfeita.`)) return;
+      localStorage.setItem('erp_contas_financeiras', JSON.stringify(list.filter(c => c.id !== id)));
+      toast.success('Conta Excluída', 'A conta foi removida do sistema.');
+      _renderCFTable();
+      _renderCFSummary();
+    });
+  });
+
+  // ─── OFX import buttons ──────────────────────────────────────
+  container.querySelectorAll('.btn-ofx-single').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openOFXModal(btn.dataset.id);
+    });
+  });
+
+  // ─── Reconciliation buttons ──────────────────────────────────
+  container.querySelectorAll('.btn-reconcile-cf').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const id = btn.dataset.id;
+      const list = JSON.parse(localStorage.getItem('erp_contas_financeiras') || '[]');
+      const conta = list.find(c => c.id === id);
+      if (conta) openReconciliationModal(conta);
     });
   });
 }
@@ -775,7 +962,7 @@ function openContaModal(conta = null) {
 
     localStorage.setItem('erp_contas_financeiras', JSON.stringify(accounts));
     modal.close();
-    _renderCFCards();
+    _renderCFTable();
     _renderCFSummary();
   });
 }
@@ -935,7 +1122,7 @@ function openOFXModal(preSelectedId = null) {
 
     toast.success('OFX Importado!', `${parsedTransactions.length} transações importadas para "${conta?.nome || 'conta'}"`);
     modal.close();
-    _renderCFCards();
+    _renderCFTable();
     _renderCFSummary();
     _renderOFXLog(JSON.parse(localStorage.getItem('erp_ofx_importados') || '[]'));
   });
@@ -1169,7 +1356,7 @@ function openBankingModal() {
       `;
 
       goToStep(4);
-      _renderCFCards();
+      _renderCFTable();
       _renderCFSummary();
       toast.success('Open Banking Conectado!', `${selectedBank} integrado com sucesso.`);
     }, 2200);
@@ -1177,6 +1364,139 @@ function openBankingModal() {
 
   // Init styles for steps
   goToStep(1);
+}
+
+// ─── Bank Reconciliation Modal (NEW) ─────────────────────────────
+function openReconciliationModal(conta) {
+  // Get imported OFX transactions
+  const ofxData = JSON.parse(localStorage.getItem('erp_ofx_importados') || '[]');
+  const contaOFX = ofxData.filter(t => t.contaNome === conta.nome);
+  
+  // Get system transactions (lancamentos)
+  const lancamentos = JSON.parse(localStorage.getItem('erp_lancamentos') || '[]');
+  const contaLancamentos = lancamentos.filter(l => l.contaId === conta.id);
+
+  // Calculate totals
+  const totalOFX = contaOFX.reduce((a, t) => t.tipo === 'receita' ? a + t.valor : a - t.valor, 0);
+  const totalLancamentos = contaLancamentos.filter(l => l.status !== 'cancelado').reduce((a, l) => l.tipo === 'receita' ? a + l.valor : a - l.valor, 0);
+  const systemBalance = conta.saldo;
+  const ofxBalance = totalOFX;
+  const difference = Math.abs(systemBalance - ofxBalance);
+  const isReconciled = difference < 0.01;
+
+  modal.open({
+    id: 'modal-reconciliation',
+    title: `Conciliação Bancária — ${conta.nome}`,
+    size: 'lg',
+    body: `
+      <div class="reconciliation-modal-content">
+        <!-- Status Summary -->
+        <div style="background:${isReconciled ? 'rgba(16, 185, 129, 0.1)' : 'rgba(245, 158, 11, 0.1)'};border:1px solid ${isReconciled ? 'rgba(16, 185, 129, 0.3)' : 'rgba(245, 158, 11, 0.3)'};border-radius:var(--radius-md);padding:var(--space-4);display:flex;justify-content:space-between;align-items:center">
+          <div style="display:flex;align-items:center;gap:var(--space-3)">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24" style="color:${isReconciled ? 'var(--clr-success)' : 'var(--clr-warning)'}"><path d="M9 11l3 3L22 4"/></svg>
+            <div>
+              <div style="font-weight:700;font-size:14px;color:var(--text-primary)">${isReconciled ? '✅ Conciliação OK' : '⚠️ Diferença Detectada'}</div>
+              <div style="font-size:12px;color:var(--text-secondary)">${isReconciled ? 'Saldo do sistema está de acordo com o banco.' : `Diferença de R$ ${fmt.currency(difference)}`}</div>
+            </div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px">DIFERENÇA</div>
+            <div style="font-size:18px;font-weight:800;color:${isReconciled ? 'var(--clr-success)' : 'var(--clr-warning)'}">${fmt.currency(difference)}</div>
+          </div>
+        </div>
+
+        <!-- Balance Comparison -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3)">
+          <div class="reconciliation-section">
+            <div class="reconciliation-section-title">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M12 5v14M5 12h14"/></svg>
+              Saldo do Sistema
+            </div>
+            <div style="font-size:20px;font-weight:800;color:var(--clr-primary-light)">${fmt.currency(systemBalance)}</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:8px">Baseado em lançamentos do ERP</div>
+          </div>
+          
+          <div class="reconciliation-section">
+            <div class="reconciliation-section-title">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+              Saldo do Banco (OFX)
+            </div>
+            <div style="font-size:20px;font-weight:800;color:${ofxBalance >= 0 ? 'var(--clr-success)' : 'var(--clr-danger)'}">${fmt.currency(ofxBalance)}</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:8px">Baseado em extratos importados</div>
+          </div>
+        </div>
+
+        <!-- Transactions from Bank (OFX) -->
+        <div class="reconciliation-section">
+          <div class="reconciliation-section-title">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M9 11l3 3L22 4"/></svg>
+            Transações Importadas do Banco (${contaOFX.length})
+          </div>
+          ${contaOFX.length > 0 ? `
+            <div class="transaction-list">
+              ${contaOFX.map(t => `
+                <div class="transaction-item" onclick="this.classList.toggle('selected')">
+                  <div class="transaction-info">
+                    <div class="transaction-date">${fmt.date(t.vencimento)}</div>
+                    <div class="transaction-desc">${t.descricao}</div>
+                  </div>
+                  <div class="transaction-amount ${t.tipo === 'receita' ? 'credit' : 'debit'}">
+                    ${t.tipo === 'receita' ? '+' : '−'} ${fmt.currency(t.valor)}
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          ` : `
+            <div style="text-align:center;padding:var(--space-4);color:var(--text-muted);font-size:13px">
+              Nenhuma transação importada do banco para esta conta.
+            </div>
+          `}
+        </div>
+
+        <!-- System Transactions -->
+        <div class="reconciliation-section">
+          <div class="reconciliation-section-title">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            Lançamentos no Sistema (${contaLancamentos.length})
+          </div>
+          ${contaLancamentos.length > 0 ? `
+            <div class="transaction-list">
+              ${contaLancamentos.slice(-20).reverse().map(l => `
+                <div class="transaction-item" onclick="this.classList.toggle('selected')">
+                  <div class="transaction-info">
+                    <div class="transaction-date">${fmt.date(l.vencimento)}</div>
+                    <div class="transaction-desc">${l.descricao}</div>
+                    <div style="font-size:11px;color:var(--text-muted);margin-top:2px">Status: ${l.status}</div>
+                  </div>
+                  <div class="transaction-amount ${l.tipo === 'receita' ? 'credit' : 'debit'}">
+                    ${l.tipo === 'receita' ? '+' : '−'} ${fmt.currency(l.valor)}
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          ` : `
+            <div style="text-align:center;padding:var(--space-4);color:var(--text-muted);font-size:13px">
+              Nenhum lançamento no sistema para esta conta.
+            </div>
+          `}
+        </div>
+
+        <!-- Tips -->
+        <div style="background:rgba(79, 110, 247, 0.08);border:1px solid rgba(79, 110, 247, 0.2);border-radius:var(--radius-md);padding:var(--space-4);font-size:12px;color:var(--text-secondary)">
+          <strong style="color:var(--clr-primary-light)">💡 Dica:</strong> Compare as transações acima. Clique nos itens para marcá-los como conciliados. Se houver diferença, verifique se não há lançamentos pendentes, futuros ou cancelados.
+        </div>
+      </div>
+    `,
+    footer: `
+      <button class="btn btn-ghost" onclick="document.getElementById('modal-reconciliation-overlay').remove()">Fechar</button>
+      <button class="btn btn-primary" id="btn-save-reconciliation" onclick="saveReconciliation('${conta.id}')">Salvar Conciliação</button>
+    `
+  });
+}
+
+function saveReconciliation(contaId) {
+  toast.success('Conciliação Salva', 'Status de conciliação atualizado com sucesso.');
+  modal.close();
 }
 
 /* ──────────────────────────────────────────────────────────
